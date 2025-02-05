@@ -53,20 +53,4 @@ Start the local development laravel server
 
 You can now access the laravel server at http://localhost:8000
 
-## Installation Vue
 
-Please check the official vite installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/10.x/vite#installing-node)
-
-Installing Vite and the Laravel Plugin
-
-    npm install
-
-Start the local development vite server
-
-    npm run dev
-
-Build vite
-
-    npm run build
-
-You can now access the laravel server at http://localhost:5173

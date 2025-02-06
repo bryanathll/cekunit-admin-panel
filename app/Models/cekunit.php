@@ -11,7 +11,7 @@ class cekunit extends Model
 {
     use HasFactory;
 
-    protected $table = 'new_cekunit';
+    protected $table = 'cekunit';
     public $timestamps = false;
     protected $primaryKey = 'no_perjanjian';
     protected $keyType = 'string';

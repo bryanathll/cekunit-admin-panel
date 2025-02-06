@@ -46,7 +46,7 @@
             <div class="ps-2 pt-3">
               <!-- dropdown sorting -->
               <select id="sortColumn">
-                <option value="nomor">No</option>
+                <option value="no">No</option>
                 <option value="nama_nasabah">Nama Nasabah</option>
                 <option value="no_perjanjian">No Perjanjain</option>
                 <option value="nopol">Nopol</option>
@@ -270,7 +270,7 @@
                         $('#cekunit-table tbody').empty();
                         response.data.forEach(function (unit) {
                             let row = `<tr>
-                                <td>${unit.nomor}</td>
+                                <td>${unit.no}</td>
                                 <td>${unit.no_perjanjian}</td>
                                 <td>${unit.nama_nasabah}</td>
                                 <td>${unit.nopol}</td>

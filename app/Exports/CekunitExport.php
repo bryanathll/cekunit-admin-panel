@@ -2,10 +2,14 @@
 
 namespace App\Exports;
 
-use App\Models\CekUnit;
+use App\Models\cekunit;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use PhpOffice\PhpSpreadsheet\Cell\StringValueBinder;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 // use Maatwebsite\Excel\Concerns\ShouldQueue;
 
 class CekUnitExport implements FromQuery, WithHeadings, WithChunkReading
@@ -17,15 +21,15 @@ class CekUnitExport implements FromQuery, WithHeadings, WithChunkReading
 
     public function query()
     {
-        return CekUnit::orderBy('nomor', 'asc');
+        return CekUnit::orderBy('no', 'asc');
     }
 
     public function collection(){
-        return CekUnit::orderBy('nomor', 'asc')
+        return CekUnit::orderBy('no', 'asc')
             ->get()
             ->map(function ($item) {
                 return [
-                    $item->nomor,
+                    $item->no,
                     $item->no_perjanjian,
                     $item->nama_nasabah,
                     $item->nopol,
@@ -40,7 +44,8 @@ class CekUnitExport implements FromQuery, WithHeadings, WithChunkReading
                     $item->warna,
                     $item->status,
                 ];
-            });
+            })
+            ->cursor();
     }
 
     public function headings(): array
@@ -63,6 +68,12 @@ class CekUnitExport implements FromQuery, WithHeadings, WithChunkReading
         ];
     }
 
+    public function bindValue(Cell $cell, $value)
+    {
+        // Force format semua cell sebagai text
+        $cell->setValueExplicit($value, DataType::TYPE_STRING);
+        return true;
+    }
     
     public function chunkSize(): int
     {

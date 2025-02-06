@@ -22,7 +22,7 @@
     <tbody>
     @foreach($cekunit as $unit)
         <tr>
-            <td>{{ $unit->nomor ?? 'null' }}</td>
+            <td>{{ $unit->no ?? 'null' }}</td>
             <td>{{ $unit->no_perjanjian ?? 'null' }}</td>
             <td>{{ $unit->nama_nasabah ?? 'null' }}</td>
             <td>{{ $unit->nopol ?? 'null' }}</td>

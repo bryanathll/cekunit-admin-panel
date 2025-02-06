@@ -32,13 +32,13 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
     Route::get('/cekunit/export', function (Request $request) {
 
         $allowedColumns = [
-            'nomor', 'no_perjanjian', 'nama_nasabah', 'nopol', 
+            'no','no_perjanjian', 'nama_nasabah', 'nopol', 
             'coll', 'pic', 'kategori', 'jto', 'no_rangka', 
             'no_mesin', 'merk', 'type', 'warna', 'status'
         ];
 
         $format = $request->query('format', 'excel');
-        $sortColumn = $request->query('sort', 'nomor');
+        $sortColumn = $request->query('sort', 'no_perjanjian');
         $sortDirection = $request->query('direction', 'asc');
     
         $filename = 'cekunit_' . date('Ymd_His') . '.' . $format;
@@ -46,7 +46,15 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
         return Excel::download(
             new CekUnitExport($sortColumn, $sortDirection),
             $filename,
-            $format === 'csv' ? \Maatwebsite\Excel\Excel::CSV : \Maatwebsite\Excel\Excel::XLSX
+            $format === 'csv' ? \Maatwebsite\Excel\Excel::CSV : \Maatwebsite\Excel\Excel::XLSX,[
+                'memory' => '512MB',
+                'timeout' => 300,
+                'use_transactions' => false,
+                'cache' => [
+                    'driver' => 'memory',
+                    'batch_size' => 1000
+                ]
+            ]
         );
     })->name('cekunit.export');
     

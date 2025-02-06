@@ -44,7 +44,7 @@ class cekunitController extends Controller
             // Data CSV
             foreach ($cekunits as $unit) {
                 fputcsv($handle, [
-                    $unit->nomor,
+                    $unit->no,
                     $unit->no_perjanjian,
                     $unit->nama_nasabah,
                     $unit->nopol,
@@ -70,7 +70,7 @@ class cekunitController extends Controller
     public function index(Request $request)
         {
 
-            $sort = $request->query('sort', 'nomor'); //default sort column
+            $sort = $request->query('sort', 'no'); //default sort column
             $direction = $request->query('direction', 'asc'); //default sort direction
 
             // Ambil data dengan pagination

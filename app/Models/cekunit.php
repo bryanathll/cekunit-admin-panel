@@ -11,13 +11,13 @@ class cekunit extends Model
 {
     use HasFactory;
 
-    protected $table = 'cekunit';
+    protected $table = 'new_cekunit';
     public $timestamps = false;
     protected $primaryKey = 'no_perjanjian';
     protected $keyType = 'string';
 
     protected $fillable=[
-        'nomor',
+        'no',
         'no_perjanjian',
         'nama_nasabah',
         'nopol',

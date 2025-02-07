@@ -76,7 +76,6 @@
               </button>
   
               <ul class="dropdown-menu mt-3">
-                <li><a href="#" class="dropdown-item" data-format="xlsx">Excel(.xlsx)</a></li>
                 <li><a href="#" class="dropdown-item" data-format="csv">Csv(.csv)</a></li>
               </ul>
 
@@ -335,7 +334,7 @@
 <!-- script download excel dan csv -->
 <script>
     $(document).ready(function() {
-        let selectedFormat = 'xlsx'; // Default format
+        let selectedFormat = 'csv'; // Default format
         
         // Handle klik dropdown item
         $('.dropdown-item').on('click', function() {

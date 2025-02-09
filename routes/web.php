@@ -5,6 +5,7 @@ use App\Http\Controllers\User\InputDataController;
 use App\Http\Controllers\User\cekunitController;
 use App\Http\Controllers\ProfileController;
 use App\Exports\CekUnitExport;
+use App\Exports\input_user_export;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
@@ -25,7 +26,12 @@ use Illuminate\Support\Facades\Redis;
 
 Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () {
     Route::get('/', [cekunitController::class, 'index'])->name('dashboard');
+
     Route::post('/cekunit/sort', [CekUnitController::class, 'sort'])->name('cekunit.sort');
+    
+    Route::get('/input-user', [cekunitController::class, 'input_user'])->name('input.user');
+    Route::post('/input_user/sort', [CekUnitController::class, 'sort_input_user'])->name('input_user.sort');
+
     Route::get('/input-data', [InputDataController::class, 'create'])->name('input.data');
     Route::post('/input-data', [InputDataController::class, 'store'])->name('input.data-nasabah');
 
@@ -43,8 +49,23 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
             $format === 'csv' ? \Maatwebsite\Excel\Excel::CSV : \Maatwebsite\Excel\Excel::XLSX
         );
     })->name('cekunit.export');
+
+    Route::get('/input_user/export', function (Request $request) {
+
+        $format = $request->query('format', 'csv');
+        $sortColumn = $request->query('sort', 'id');
+        $sortDirection = $request->query('direction', 'asc');
     
-    Route::resource('cekunit', cekunitController::class)->except(['show']);
+        $filename = 'input_user_' . date('Ymd_His') . '.' . $format;
+    
+        return Excel::download(
+            new input_user_export($sortColumn, $sortDirection),
+            $filename,
+            $format === 'csv' ? \Maatwebsite\Excel\Excel::CSV : \Maatwebsite\Excel\Excel::XLSX
+        );
+    })->name('input_user.export');
+    
+    Route::resource('input_user', cekunitController::class)->except(['show']);
 });
 
 Route::resource('cekunit', cekunitController::class);

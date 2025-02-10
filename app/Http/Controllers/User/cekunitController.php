@@ -99,27 +99,7 @@ public function deleteAll(Request $request)
 
 
     // ================ start Controller index ================ // Validasi UNtuk Delete Data
-public function deleteAll(Request $request)
-{
-    // Validasi input password
-    $request->validate([
-        'password' => 'required|string',
-    ]);
 
-    // Ambil user yang sedang login
-    $user = Auth::user();
-
-    // Verifikasi password
-    if (!Hash::check($request->password, $user->password)) {
-        return redirect()->route('dashboard')->with('error', 'Password salah. Penghapusan data dibatalkan.');
-    }
-
-    // Hapus semua data dari tabel cekunit
-    cekunit::truncate();
-
-    // Redirect dengan pesan sukses
-    return redirect()->route('dashboard')->with('success', 'Semua data berhasil dihapus.');
-}
 
     // Method untuk menangani kedua kasus: tampilan utama dan permintaan AJAX
     public function index(Request $request)

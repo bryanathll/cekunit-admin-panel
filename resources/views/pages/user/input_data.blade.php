@@ -24,6 +24,28 @@
         <div class="container-fluid">
             <div class="row">
 
+            
+                <!-- form insert data .csv -->
+                <div class="container mt-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title"> Insert Data Dari CSV </h4>
+                            
+                        </div>
+                        <div class="card-body">
+                            <form action="{{route('input.data.import')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label for="csv_file">Pilih File</label>
+                                <input type="file" name="csv_file" id="csv_file" class="form-control" accept=".csv" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">Insert Data</button>  
+                            </form>
+                        </div>
+                    </div>
+                 </div>    
+
+
                 @if (Session::has('success'))
                     <div class="alert alert-success" role="alert">
                         {{ Session::get('success') }}

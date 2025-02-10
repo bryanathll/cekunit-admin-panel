@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\cekunit;
 use App\Models\input_user;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class cekunitController extends Controller
 {
@@ -172,5 +174,91 @@ class cekunitController extends Controller
     public function show($no_perjanjian){
         $unit = cekunit::find($no_perjanjian);
         return view('user.cekunit.show', compact('unit'));
+    }
+
+
+    public function import(Request $request) {
+        set_time_limit(0);
+        
+        // Validasi file CSV
+        $validator = Validator::make($request->all(), [
+            'csv_file' => 'required|mimes:csv,txt|max:5048'
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+    
+        // Ambil file CSV
+        $file = $request->file('csv_file');
+        if (!$file || !$file->isValid()) {
+            return redirect()->back()->withErrors(['csv_file' => 'File tidak ditemukan atau rusak!'])->withInput();
+        }
+    
+        // Baca file CSV
+        $csvData = array_map('str_getcsv', file($file->getPathname()));
+    
+        // Hapus header
+        $header = array_shift($csvData);
+        if (!$header) {
+            return redirect()->back()->withErrors(['csv_file' => 'Format file tidak valid'])->withInput();
+        }
+    
+        $dataToInsert = [];
+    
+        // Proses setiap baris data
+        foreach ($csvData as $row) {
+            // Lewati baris jika jumlah kolom tidak sesuai
+            if (count($row) !== count($header)) {
+                continue;
+            }
+    
+            $data = array_combine($header, $row);
+    
+            // Validasi data
+            $validator = Validator::make($data, [
+                'no_perjanjian' => 'nullable|string',
+                'nopol' => 'nullable|string',
+                'coll' => 'nullable|string',
+                'pic' => 'nullable|string',
+                'kategori' => 'nullable|string',
+                'jto' => 'nullable|integer',
+                'no_rangka' => 'nullable|string',
+                'no_mesin' => 'nullable|string',
+                'merk' => 'nullable|string',
+                'type' => 'nullable|string',
+                'warna' => 'nullable|string',
+                'status' => 'nullable|string',
+            ]);
+    
+            if ($validator->fails()) {
+                continue; // Lewati baris yang gagal validasi
+            }
+    
+            // Format data untuk insert
+            $dataToInsert[] = [
+                'no_perjanjian' => !empty($data['no_perjanjian']) ? (string) $data['no_perjanjian'] : null,
+                'nama_nasabah' => !empty($data['nama_nasabah']) ? (string) $data['nama_nasabah'] : null,
+                'nopol' => !empty($data['nopol']) ? (string) $data['nopol'] : null,
+                'coll' => !empty($data['coll']) ? (string) $data['coll'] : null,
+                'pic' => !empty($data['pic']) ? (string) $data['pic'] : null,
+                'kategori' => !empty($data['kategori']) ? (string) $data['kategori'] : null,
+                'jto' => !empty($data['jto']) ? (int) $data['jto'] : null,
+                'no_rangka' => !empty($data['no_rangka']) ? (string) $data['no_rangka'] : null,
+                'no_mesin' => !empty($data['no_mesin']) ? (string) $data['no_mesin'] : null,
+                'merk' => !empty($data['merk']) ? (string) $data['merk'] : null,
+                'type' => !empty($data['type']) ? (string) $data['type'] : null,
+                'warna' => !empty($data['warna']) ? (string) $data['warna'] : null,
+                'status' => !empty($data['status']) ? (string) $data['status'] : null,
+                
+            ];
+        }
+    
+        // Insert data ke database dalam batch
+        foreach (array_chunk($dataToInsert, 5000) as $batch) {
+            DB::table('cekunit')->insert($batch);
+        }
+    
+        return redirect()->back()->with('success', 'Data berhasil diimpor!');
     }
 }

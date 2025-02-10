@@ -17,7 +17,7 @@
                     <div class="menu-icon">
                         <img src="https://www.svgrepo.com/show/278469/table-excel.svg" width="25px" alt="">
                     </div>
-                    <span class="nav-text mx-3">Input user</span>
+                    <span class="nav-text mx-3">Input Pengecekan</span>
                 </a>
             </li>
 
@@ -26,7 +26,7 @@
                     <div class="menu-icon">
                         <img src="https://www.svgrepo.com/show/299266/database-server.svg" width="25px" alt="">
                     </div>
-                    <span class="nav-text mx-3">Input Data</span>
+                    <span class="nav-text mx-3">Insert Data</span>
                 </a>
             </li>
 

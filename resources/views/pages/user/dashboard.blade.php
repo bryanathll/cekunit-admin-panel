@@ -42,6 +42,7 @@
 
 
         <h4 class="card-header">Data Table Cek Unit</h4>
+            <input type="text" id="search-input" placeholder="Search..." value="{{ request('search') }}">
           <div class="table-responsive">
             <div class="ps-2 pt-3">
               <!-- dropdown sorting -->
@@ -84,12 +85,43 @@
                 Download
               </a>
 
-            </div>
+              <!-- Tombol Trigger Modal -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAllModal">
+    Hapus Semua Data
+</button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="deleteAllModal" tabindex="-1" aria-labelledby="deleteAllModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteAllModalLabel">Konfirmasi Hapus Semua Data</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="deleteAllForm" action="{{ route('cekunit.deleteAll') }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <div class="mb-3">
+                                                <label for="password" class="form-label">Masukkan Password untuk Konfirmasi</label>
+                                                <input type="password" class="form-control" id="password" name="password" required>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                        <button type="submit" form="deleteAllForm" class="btn btn-danger">Hapus Semua Data</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
-            </div>
+            <div id="search-results">
                 <!-- Data table dimuat di sini melalui AJAX -->
-                @include('pages/user/pagination_table', ['sort' => $sort, 'direction' => $direction])
+                @include('pages.user.pagination_table', ['cekunit' => $cekunit, 'sort' => $sort, 'direction' => $direction])
+          </div>
+          </div>    
           </div>
 
 <!-- modal untuk edit data -->
@@ -331,6 +363,60 @@
 </script>
 
 
+<!-- script Cari  -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Deteksi perubahan pada input pencarian
+        $('#search-input').on('input', function() {
+            let search = $(this).val(); // Ambil nilai dari input pencarian
+            let sort = "{{ request('sort', 'no') }}"; // Ambil parameter sort
+            let direction = "{{ request('direction', 'asc') }}"; // Ambil parameter direction
+
+            console.log('Search:', search); // Debugging: Cek nilai search
+            console.log('Sort:', sort); // Debugging: Cek nilai sort
+            console.log('Direction:', direction); // Debugging: Cek nilai direction
+
+            // Kirim permintaan AJAX ke server
+            $.ajax({
+                url: "{{ route('dashboard') }}", // URL route untuk pencarian
+                method: 'GET',
+                data: {
+                    search: search, // Parameter pencarian
+                    sort: sort, // Parameter sort
+                    direction: direction // Parameter direction
+                },
+                success: function(response) {
+                    console.log('Response:', response); // Debugging: Cek response dari server
+                    // Update tabel dengan hasil pencarian
+                    $('#search-results').html(response);
+                },
+                error: function(xhr) {
+                    console.log('Error:', xhr.responseText); // Tampilkan error di console (opsional)
+                }
+            });
+        });
+    });
+</script>
+
+<!-- script Pop Up Deleter all data -->
+<script>
+    document.getElementById('deleteAllForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Mencegah form dikirim secara default
+
+        // Ambil nilai password
+        const password = document.getElementById('password').value;
+
+        // Lakukan validasi password (contoh sederhana)
+        if (password.trim() === '') {
+            alert('Password tidak boleh kosong!');
+            return;
+        }
+
+        // Jika validasi berhasil, kirim form
+        this.submit();
+    });
+</script>
 <!-- script download excel dan csv -->
 <script>
     $(document).ready(function() {

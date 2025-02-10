@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Redis;
 
 Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () {
     Route::get('/', [cekunitController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [cekunitController::class, 'index'])->name('dashboard');
 
     Route::post('/cekunit/sort', [CekUnitController::class, 'sort'])->name('cekunit.sort');
     
@@ -76,6 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
+Route::delete('/cekunit/delete-all', [CekunitController::class, 'deleteAll'])->name('cekunit.deleteAll');
+Route::get('/search', [ProductController::class, 'search'])->name('search');
 
 require __DIR__ . '/auth.php';

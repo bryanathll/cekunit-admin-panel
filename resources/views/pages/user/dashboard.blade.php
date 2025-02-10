@@ -373,6 +373,55 @@
             let sort = "{{ request('sort', 'no') }}"; // Ambil parameter sort
             let direction = "{{ request('direction', 'asc') }}"; // Ambil parameter direction
 
+            // Kirim permintaan AJAX ke server
+            $.ajax({
+                url: "{{ route('dashboard') }}", // URL route untuk pencarian
+                method: 'GET',
+                data: {
+                    search: search, // Parameter pencarian
+                    sort: sort, // Parameter sort
+                    direction: direction // Parameter direction
+                },
+                success: function(response) {
+                    // Update tabel dengan hasil pencarian
+                    $('#search-results').html(response);
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText); // Tampilkan error di console (opsional)
+                }
+            });
+        });
+    });
+</script>
+
+<!-- script Pop Up Deleter all data -->
+<script>
+    document.getElementById('deleteAllForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Mencegah form dikirim secara default
+
+        // Ambil nilai password
+        const password = document.getElementById('password').value;
+
+        // Lakukan validasi password (contoh sederhana)
+        if (password.trim() === '') {
+            alert('Password tidak boleh kosong!');
+            return;
+        }
+
+        // Jika validasi berhasil, kirim form
+        this.submit();
+    });
+</script>
+<!-- script Cari  -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Deteksi perubahan pada input pencarian
+        $('#search-input').on('input', function() {
+            let search = $(this).val(); // Ambil nilai dari input pencarian
+            let sort = "{{ request('sort', 'no') }}"; // Ambil parameter sort
+            let direction = "{{ request('direction', 'asc') }}"; // Ambil parameter direction
+
             console.log('Search:', search); // Debugging: Cek nilai search
             console.log('Sort:', sort); // Debugging: Cek nilai sort
             console.log('Direction:', direction); // Debugging: Cek nilai direction

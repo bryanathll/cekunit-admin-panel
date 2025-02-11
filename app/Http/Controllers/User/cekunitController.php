@@ -76,72 +76,61 @@ class cekunitController extends Controller
 
 // ============================================ start Controller index ================================================ 
     // Method untuk menangani kedua kasus: tampilan utama dan permintaan AJAX
-    public function index(Request $request)
-        {
-
-            $sort = $request->query('sort', 'no'); //default sort column
-            $direction = $request->query('direction', 'asc'); //default sort direction
-
-            // Ambil data dengan pagination
-            $cekunit = cekunit::orderBy($sort, $direction)->paginate(20);
-
-            // Jika permintaan AJAX, kembalikan view pagination saja
-            if ($request->ajax()) {
-                return view('pages.user.pagination_table', compact('cekunit', 'sort', 'direction'))->render();
-            }
-
-            // Jika bukan AJAX, kembalikan view lengkap
-            return view('pages.user.dashboard', compact('cekunit', 'sort', 'direction'));
+    public function index(Request $request) {
+        // Ambil parameter dari request
+        $search = $request->query('search', ''); // Parameter pencarian
+        $sort = $request->query('sort', 'no'); // Parameter sorting (default: 'no')
+        $direction = $request->query('direction', 'asc'); // Parameter arah sorting (default: 'asc')
+    
+        // Query data dengan filter pencarian
+        $cekunit = cekunit::when($search, function ($query, $search) {
+            return $query->whereRaw('LOWER(no_perjanjian) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(nama_nasabah) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(nopol) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(no_rangka) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(no_mesin) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(merk) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(type) LIKE ?', ['%' . strtolower($search) . '%']);
+        })
+        ->orderBy($sort, $direction) // Sorting
+        ->paginate(20) // Pagination
+        ->appends([
+            'search' => $search,
+            'sort' => $sort,
+            'direction' => $direction
+        ]);
+    
+        // Jika request AJAX, kembalikan view pagination saja
+        if ($request->ajax()) {
+            return view('pages.user.pagination_table', compact('cekunit', 'sort', 'direction', 'search'))->render();
         }
+    
+        // Jika bukan AJAX, kembalikan view lengkap
+        return view('pages.user.dashboard', compact('cekunit', 'sort', 'direction', 'search'));
+    }
 // ============================================== end Controller index ================================================
 
 
-        public function search(Request $request){
-            $search = $request->query('search', '');
-            $sort = $request->query('sort', 'no'); // Ambil sort dari request
-            $direction = $request->query('direction', 'asc'); // Ambil direction dari request
 
-            $cekunit = cekunit::when($search, function ($query, $search) {
-                return $query->whereRaw('LOWER(no_perjanjian) LIKE ?', ['%' . strtolower($search) . '%'])
-                            ->orWhereRaw('LOWER(nama_nasabah) LIKE ?', ['%' . strtolower($search) . '%'])
-                            ->orWhereRaw('LOWER(nopol) LIKE ?', ['%' . strtolower($search) . '%'])
-                            ->orWhereRaw('LOWER(no_rangka) LIKE ?', ['%' . strtolower($search) . '%'])
-                            ->orWhereRaw('LOWER(no_mesin) LIKE ?', ['%' . strtolower($search) . '%'])
-                            ->orWhereRaw('LOWER(merk) LIKE ?', ['%' . strtolower($search) . '%'])
-                            ->orWhereRaw('LOWER(type) LIKE ?', ['%' . strtolower($search) . '%']);
-            })
-            ->orderBy($sort, $direction)
+// ============================================ start Controller input_user ================================================ 
+    public function input_user(Request $request) {
+        $sort = $request->query('sort', 'id');
+        $direction = $request->query('direction', 'asc');
+
+        $input_user = input_user::orderBy($sort, $direction)
             ->paginate(20)
-            ->appends(['search' => $search, 'sort' => $sort, 'direction' => $direction]);
+            ->appends([
+                'sort' => $sort,
+                'direction' => $direction
+            ]);
 
-            if ($request->ajax()) {
-                return view('pages.user.pagination_table', compact('cekunit', 'sort', 'direction', 'search'))->render();
-            }
-
-            return view('pages.user.dashboard', compact('cekunit', 'sort', 'direction', 'search'));
+        if ($request->ajax()) {
+            return view('pages.user.input_user', compact('input_user', 'sort', 'direction'))->render();
         }
 
-
-
-// =========================================== start Controller input_user ===========================================
-    public function input_user(Request $request)
-        {
-
-            $sort = $request->query('sort', 'id'); //default sort column
-            $direction = $request->query('direction', 'asc'); //default sort direction
-
-            // Ambil data dengan pagination
-            $input_user = input_user::orderBy($sort, $direction)->paginate(20);
-
-            // Jika permintaan AJAX, kembalikan view pagination saja
-            if ($request->ajax()) {
-                return view('pages.user.input_user', compact('input_user', 'sort', 'direction'))->render();
-            }
-
-            // Jika bukan AJAX, kembalikan view lengkap
-            return view('pages.user.input_user_table', compact('input_user', 'sort', 'direction'));
-        }
-// =========================================== end Controller input_ueser =============================================
+        return view('pages.user.input_user_table', compact('input_user', 'sort', 'direction'));
+    }
+// ============================================== end Controller input_user ================================================
 
 
 

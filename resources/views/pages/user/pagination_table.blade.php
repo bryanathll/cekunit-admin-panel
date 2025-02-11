@@ -63,8 +63,11 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="15" class="text-center">
-                {{ $cekunit->appends(['search' => request('search'), 'sort' => $sort, 'direction' => $direction])->links('pagination::bootstrap-4') }}
+            <td colspan="13" class="text-center">
+                {{ $cekunit->appends([
+                    'sort' => request('sort'),
+                    'direction' => request('direction')
+                ])->links('pagination::bootstrap-4') }}
             </td>
         </tr>
     </tfoot>

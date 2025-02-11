@@ -25,13 +25,17 @@
     @endforeach
     </tbody>
 
-<tfoot>
-    <tr>
-        <td colspan="13" class="text-center">
-            {{ $input_user->appends(['sort' => $sort, 'direction' => $direction])->links('pagination::bootstrap-4') }}
-        </td>
-    </tr>
-</tfoot>
+    <tfoot>
+        <tr>
+            <td colspan="13" class="text-center">
+                {{ $input_user->appends([
+                    'search' => request('search'),
+                    'sort' => request('sort'),
+                    'direction' => request('direction')
+                ])->links('pagination::bootstrap-4') }}
+            </td>
+        </tr>
+    </tfoot>
 </table>
 
 

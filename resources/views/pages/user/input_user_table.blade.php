@@ -64,100 +64,13 @@
 
             </div>
                 <!-- Data table dimuat di sini melalui AJAX -->
-                @include('pages/user/input_user', ['sort' => $sort, 'direction' => $direction])
+                @include('pages.user.input_user', ['sort' => $sort, 'direction' => $direction])
           </div>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Sertakan jQuery -->
-<!-- script pagination -->
-<script>
-$(document).ready(function() {
-    function loadPage(page) {
-        let sortColumn = $('#sortColumn').val();
-        let sortDirection = $('#sortDirection').val();
-
-        $.ajax({
-            url: "{{ route('input.user') }}?page=" + page + "&sort=" + sortColumn + "&direction=" + sortDirection,
-            type: 'GET',
-            dataType: 'html',
-            success: function(data) {
-                console.log('Data received:', data); // Debug: Lihat respons dari server
-                $('#input-user-table tbody').html($(data).find('tbody').html());
-                $('#input-user-table tfoot').html($(data).find('tfoot').html());
-
-                let newUrl = `?page=${page}&sort=${sortColumn}&direction=${sortDirection}`;
-                window.history.pushState({ path: newUrl }, '', newUrl);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error loading pagination data:', error);
-            }
-        });
-    }
-
-    // Menangani klik tautan pagination
-    $(document).on('click', '.pagination a', function(event) {
-        event.preventDefault();
-        let url = $(this).attr('href');
-        let page = new URL(url).searchParams.get('page'); // Ekstrak page dengan benar
-        loadPage(page);
-    });
-});
-
-</script>
-
-<!-- script sort feature -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#sortButton').click(function () {
-            let sortColumn = $('#sortColumn').val();
-            let sortDirection = $('#sortDirection').val();
-
-            // send AJAX request to sort endpoint
-            $.ajax({
-                url: "{{ route('input_user.sort') }}",
-                method: 'POST',
-                data: {
-                    sort: sortColumn,
-                    direction: sortDirection,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function (response) {
-                    // Pastikan response.data ada sebelum menggunakan forEach
-                        $('#input-user-table tbody').empty();
-                        response.data.forEach(function (input) {
-                            let row = `<tr>
-                                <td>${input.id}</td>
-                                <td>${input.created_at}</td>
-                                <td>${input.userID}</td>
-                                <td>${input.nopol}</td>
-                                <td>${input.lokasi}</td>
-                                <td>${input.ForN}</td>
-                                <td>${input.nama}</td>
-                            </tr>`;
-                            $('#input-user-table tbody').append(row);
-                        });
-
-                        // Update pagination
-                        // if (response.pagination) {
-                        //     $('.pagination').html(response.pagination);
-                        // }
-
-                    // Perbarui URL dengan parameter sorting
-                    let newUrl = `{{ route('input.user') }}?sort=${sortColumn}&direction=${sortDirection}`;
-                    window.history.pushState({ path: newUrl }, '', newUrl);
-                },
-                error: function (xhr) {
-                    console.log(xhr.responseText); // Tampilkan pesan error di console
-                }
-            });
-        });
-    });
-</script>
-
-
 <!-- script download excel dan csv -->
 <script>
     $(document).ready(function() {
@@ -184,6 +97,58 @@ $(document).ready(function() {
         });
     });
 </script>
+
+<!-- script pagination and sort -->
+<script>
+$(document).ready(function() {
+    // Fungsi untuk memuat data
+    function fetchData(page = 1) {
+        const sort = $('#sortColumn').val();
+        const direction = $('#sortDirection').val();
+
+        $.ajax({
+            url: "{{ route('input.user') }}",
+            method: 'GET',
+            data: {
+                page: page,
+                sort: $('#sortColumn').val(),
+                direction: $('#sortDirection').val()
+            },
+            success: function(response) {
+                $('#input-user-table').replaceWith(response);
+            },
+            error: function(xhr) {
+                console.log('Error:', xhr.responseText);
+            }
+        });
+    }
+
+    // Fungsi update URL browser
+    function updateBrowserURL(page, sort, direction) {
+        const params = new URLSearchParams({
+            page: page,
+            sort: sort,
+            direction: direction
+        });
+        const newUrl = `{{ route('input.user') }}?${params.toString()}`;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+    }
+
+    // Event handler untuk tombol sort
+    $('#sortButton').on('click', function() {
+        fetchData(1);
+    });
+
+    // Event handler untuk pagination
+    $(document).on('click', '.pagination a', function(event) {
+        event.preventDefault();
+        const page = $(this).attr('href').split('page=')[1];
+        fetchData(page);
+    });
+});
+</script>
+
+
 
 <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
 <script src="{{ asset('assets/js/config.js') }}"></script>

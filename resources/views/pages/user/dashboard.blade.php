@@ -103,8 +103,12 @@
 
 
                     <div id="search-results">
-                        <!-- Data table dimuat di sini melalui AJAX -->
-                        @include('pages.user.pagination_table', ['cekunit' => $cekunit, 'sort' => $sort, 'direction' => $direction])
+                        @include('pages.user.pagination_table', [
+                            'cekunit' => $cekunit,
+                            'sort' => $sort,
+                            'direction' => $direction,
+                            'search' => $search
+                        ])
                     </div>
                 </div>    
             </div>
@@ -206,214 +210,6 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Ketika tombol edit diklik
-        $(document).on('click', '.edit-btn', function() {
-            // Ambil data dari atribut data-*
-            var no_perjanjian = $(this).data('no_perjanjian');
-            var nama_nasabah = $(this).data('nama_nasabah');
-            var nopol = $(this).data('nopol');
-            var coll = $(this).data('coll');
-            var pic = $(this).data('pic');
-            var kategori = $(this).data('kategori');
-            var jto = $(this).data('jto');
-            var no_rangka = $(this).data('no_rangka');
-            var no_mesin = $(this).data('no_mesin');
-            var merk = $(this).data('merk');
-            var type = $(this).data('type');
-            var warna = $(this).data('warna');
-            var status = $(this).data('status');
-
-            // Isi form di modal dengan data yang sesuai
-            $('#editForm').attr('action', '/cekunit/' + no_perjanjian); // Set action form
-            $('#no_perjanjian').val(no_perjanjian);
-            $('#nama_nasabah').val(nama_nasabah);
-            $('#nopol').val(nopol);
-            $('#coll').val(coll);
-            $('#pic').val(pic);
-            $('#kategori').val(kategori);
-            $('#jto').val(jto);
-            $('#no_rangka').val(no_rangka);
-            $('#no_mesin').val(no_mesin);
-            $('#merk').val(merk);
-            $('#type').val(type);
-            $('#warna').val(warna);
-            $('#status').val(status);
-
-            // Jika ada field lain, isi di sini
-        });
-    });
-</script>
-
-
-<!-- script pagination -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Fungsi untuk memuat data pagination
-        function loadPage(page) {
-          let sortColumn = $('#sortColumn').val();
-          let sortDirection = $('#sortDirection').val();
-
-            $.ajax({
-                url: '/dashboard?page=' + page + '&sort=' + sortColumn + '&direction=' + sortDirection,// Gunakan URL yang sama
-                type: 'GET',
-                dataType: 'html',
-                success: function(data) {
-                    console.log('Data received:', data); // Debug: Lihat respons dari server
-                    $('#cekunit-table tbody').html($(data).find('tbody').html());
-                    $('#cekunit-table tfoot').html($(data).find('tfoot').html());
-
-                  let newUrl = `{{ route('dashboard') }}?page=${page}`;
-                        window.history.pushState({ path: newUrl }, '', newUrl);
-                        
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error loading pagination data:', error);
-                }
-            });
-        }
-
-        // Menangani klik tautan pagination
-        $(document).on('click', '.pagination a', function(event) {
-            event.preventDefault(); // Mencegah perilaku default
-            var page = $(this).attr('href').split('page=')[1];
-            loadPage(page);
-        });
-    });
-</script>
-
-<!-- script sort feature -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#sortButton').click(function () {
-            let sortColumn = $('#sortColumn').val();
-            let sortDirection = $('#sortDirection').val();
-
-            // send AJAX request to sort endpoint
-            $.ajax({
-                url: "{{ route('cekunit.sort') }}",
-                method: 'POST',
-                data: {
-                    sort: sortColumn,
-                    direction: sortDirection,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function (response) {
-                    // Pastikan response.data ada sebelum menggunakan forEach
-                        $('#cekunit-table tbody').empty();
-                        response.data.forEach(function (unit) {
-                            let row = `<tr>
-                                <td>${unit.no}</td>
-                                <td>${unit.no_perjanjian}</td>
-                                <td>${unit.nama_nasabah}</td>
-                                <td>${unit.nopol}</td>
-                                <td>${unit.coll}</td>
-                                <td>${unit.pic}</td>
-                                <td>${unit.kategori}</td>
-                                <td>${unit.jto}</td>
-                                <td>${unit.no_rangka}</td>
-                                <td>${unit.no_mesin}</td>
-                                <td>${unit.merk}</td>
-                                <td>${unit.type}</td>
-                                <td>${unit.warna}</td>
-                                <td>${unit.status}</td>
-                                <td>
-                                
-                                 <button class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal"
-                                      data-no_perjanjian="${unit.no_perjanjian}"
-                                      data-nama_nasabah="${unit.nama_nasabah}"
-                                      data-nopol="${unit.nopol}"
-                                      data-coll="${unit.coll}"
-                                      data-pic="${unit.pic}"
-                                      data-kategori="${unit.kategori}"
-                                      data-jto="${unit.jto}"
-                                      data-no_rangka="${unit.no_rangka}"
-                                      data-no_mesin="${unit.no_mesin}"
-                                      data-merk="${unit.merk}"
-                                      data-type="${unit.type}"
-                                      data-warna="${unit.warna}"
-                                      data-status="${unit.status}">
-                                      Edit
-                                  </button>
-
-                                <form action="/cekunit/${unit.id}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
-                                </form>
-                                
-                                </td>
-                            </tr>`;
-                            $('#cekunit-table tbody').append(row);
-                        });
-
-                    // Update pagination
-                    // if (response.pagination) {
-                    //     $('.pagination').html(response.pagination);
-                    // }
-
-                    // Perbarui URL dengan parameter sorting
-                    let newUrl = `{{ route('dashboard') }}?sort=${sortColumn}&direction=${sortDirection}`;
-                    window.history.pushState({ path: newUrl }, '', newUrl);
-                },
-                error: function (xhr) {
-                    console.log(xhr.responseText); // Tampilkan pesan error di console
-                }
-            });
-        });
-    });
-</script>
-
-
-
-<!-- script Cari  -->
-<script>
-    $(document).ready(function() {
-        // Fungsi pencarian AJAX
-        $('#search-input').on('input', function() {
-            let search = $(this).val();
-            fetchData(1, search); // Jalankan AJAX pencarian di halaman pertama
-        });
-
-        // Fungsi pagination AJAX
-        $(document).on('click', '.pagination a', function(event) {
-            event.preventDefault(); // Mencegah perilaku default link pagination
-            let page = $(this).attr('href').split('page=')[1]; // Ambil nomor halaman dari URL
-            let search = $('#search-input').val(); // Ambil nilai pencarian saat ini
-            fetchData(page, search); // Panggil fungsi fetchData dengan nomor halaman dan search
-        });
-
-        // Fungsi umum untuk mengambil data dengan AJAX
-        function fetchData(page, search) {
-            let sort = "{{ request('sort', 'no') }}"; // Ambil parameter sort dari URL
-            let direction = "{{ request('direction', 'asc') }}"; // Ambil parameter direction dari URL
-
-            $.ajax({
-                url: "{{ route('search') }}", // URL tujuan AJAX
-                method: 'GET',
-                data: {
-                    page: page,
-                    search: search,
-                    sort: sort,
-                    direction: direction
-                },
-                success: function(response) {
-                    $('#search-results').html(response); // Perbarui tabel tanpa reload halaman
-                    
-                    let newUrl = `{{ route('dashboard') }}?search=${search}&sort=${sortColumn}&direction=${sortDirection}`;
-                    window.history.pushState({ path: newUrl }, '', newUrl);
-                },
-                
-                error: function(xhr) {
-                    console.log('Error:', xhr.responseText);
-                }
-            });
-        }
-    });
-</script>
 
 <!-- script download excel dan csv -->
 <script>
@@ -441,6 +237,66 @@
         });
     });
 </script>
+
+<!-- script -->
+<script>
+$(document).ready(function() {
+    // Fungsi utama untuk mengambil data
+    function fetchData(page = 1) {
+        const search = $('#search-input').val();
+        const sort = $('#sortColumn').val();
+        const direction = $('#sortDirection').val();
+
+        $.ajax({
+            url: "{{ route('dashboard') }}", // Menggunakan route dashboard
+            method: 'GET',
+            data: {
+                page: page,
+                search: search,
+                sort: sort,
+                direction: direction
+            },
+            success: function(response) {
+                $('#search-results').html(response);
+                updateBrowserURL(page, search, sort, direction);
+            },
+            error: function(xhr) {
+                console.log('Error:', xhr.responseText);
+            }
+        });
+    }
+
+    // Fungsi update URL browser
+    function updateBrowserURL(page, search, sort, direction) {
+        const params = new URLSearchParams({
+            page: page,
+            search: search,
+            sort: sort,
+            direction: direction
+        });
+        const newUrl = `{{ route('dashboard') }}?${params.toString()}`;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+    }
+
+    // Event handler untuk search input
+    $('#search-input').on('input', function() {
+        fetchData(1);
+    });
+
+    // Event handler untuk tombol sort
+    $('#sortButton').on('click', function() {
+        fetchData(1);
+    });
+
+    // Event handler untuk pagination
+    $(document).on('click', '.pagination a', function(event) {
+        event.preventDefault();
+        const page = $(this).attr('href').split('page=')[1];
+        fetchData(page);
+    });
+});
+</script>
+
 
 <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
 <script src="{{ asset('assets/js/config.js') }}"></script>

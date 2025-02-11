@@ -68,6 +68,7 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
     Route::resource('input_user', cekunitController::class)->except(['show']);
 
     Route::post('/input_user/insert', [cekunitController::class, 'import'])->name('input.data.import');
+
 });
 
 Route::resource('cekunit', cekunitController::class);

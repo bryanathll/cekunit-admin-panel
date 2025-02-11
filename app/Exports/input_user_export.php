@@ -10,35 +10,16 @@ use PhpOffice\PhpSpreadsheet\Cell\StringValueBinder;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
-// use Maatwebsite\Excel\Concerns\ShouldQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class input_user_export implements FromQuery, WithHeadings, WithChunkReading
+class input_user_export implements FromQuery, WithHeadings, WithChunkReading, ShouldQueue
 {
     protected $sortColumn;
     protected $sortDirection;
 
-
-
     public function query()
     {
         return input_user::orderBy('id', 'asc');
-    }
-
-    public function collection(){
-        return input_user::orderBy('id', 'asc')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    $item->id,
-                    $item->created_at,
-                    $item->userID,
-                    $item->nopol,
-                    $item->lokasi,
-                    $item->ForN,
-                    $item->nama,
-                ];
-            })
-            ->cursor();
     }
 
     public function headings(): array
@@ -63,6 +44,6 @@ class input_user_export implements FromQuery, WithHeadings, WithChunkReading
     
     public function chunkSize(): int
     {
-        return 100000; // Proses data per 1000 baris
+        return 1000; // Proses data per 1000 baris
     }
 }

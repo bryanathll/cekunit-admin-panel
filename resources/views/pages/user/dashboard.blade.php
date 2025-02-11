@@ -41,7 +41,18 @@
     @endif
 
 
-        <h4 class="card-header">Data Table Cek Unit</h4>
+            <div class="card-header">
+                <div class="col-9 ">
+                    <h4 class="">Data Table Cek Unit</h4>
+                </div>
+
+                <div class="col">
+                    <form class="d-flex search" role="search">
+                        <input class="form-control me-2  rounded-pill search-border " type="text" id="search-input" placeholder="Search..." value="{{ request('search') }}">
+                    </form>
+                </div>
+            </div>
+
           <div class="table-responsive">
             <div class="ps-2 pt-3">
               <!-- dropdown sorting -->
@@ -67,7 +78,7 @@
                 <option value="desc">Desc</option>
               </select>
   
-              <button id='sortButton' class="btn btn-secondary" style="--bs-btn-padding-y: .20rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem; --bs-btn-border-color: var(--bd-violet-bg);">
+              <button id='sortButton' class="btn btn-secondary">
               Sort
               </button>
               <div class="dropdown mb-3 mt-3">
@@ -86,11 +97,14 @@
 
             </div>
 
-
-            </div>
-                <!-- Data table dimuat di sini melalui AJAX -->
-                @include('pages/user/pagination_table', ['sort' => $sort, 'direction' => $direction])
-          </div>
+            <div id="search-results">
+    @include('pages.user.pagination_table', [
+        'cekunit' => $cekunit,
+        'sort' => $sort,
+        'direction' => $direction,
+        'search' => $search
+    ])
+</div>
 
 <!-- modal untuk edit data -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -210,126 +224,7 @@
 </script>
 
 <!-- Sertakan jQuery -->
-<!-- script pagination -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Fungsi untuk memuat data pagination
-        function loadPage(page) {
-          let sortColumn = $('#sortColumn').val();
-          let sortDirection = $('#sortDirection').val();
-
-            $.ajax({
-                url: '/dashboard?page=' + page + '&sort=' + sortColumn + '&direction=' + sortDirection,// Gunakan URL yang sama
-                type: 'GET',
-                dataType: 'html',
-                success: function(data) {
-                    console.log('Data received:', data); // Debug: Lihat respons dari server
-                    $('#cekunit-table tbody').html($(data).find('tbody').html());
-                    $('#cekunit-table tfoot').html($(data).find('tfoot').html());
-
-                  let newUrl = `{{ route('dashboard') }}?page=${page}`;
-                        window.history.pushState({ path: newUrl }, '', newUrl);
-                        
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error loading pagination data:', error);
-                }
-            });
-        }
-
-        // Menangani klik tautan pagination
-        $(document).on('click', '.pagination a', function(event) {
-            event.preventDefault(); // Mencegah perilaku default
-            var page = $(this).attr('href').split('page=')[1];
-            loadPage(page);
-        });
-    });
-</script>
-
-<!-- script sort feature -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#sortButton').click(function () {
-            let sortColumn = $('#sortColumn').val();
-            let sortDirection = $('#sortDirection').val();
-
-            // send AJAX request to sort endpoint
-            $.ajax({
-                url: "{{ route('cekunit.sort') }}",
-                method: 'POST',
-                data: {
-                    sort: sortColumn,
-                    direction: sortDirection,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function (response) {
-                    // Pastikan response.data ada sebelum menggunakan forEach
-                        $('#cekunit-table tbody').empty();
-                        response.data.forEach(function (unit) {
-                            let row = `<tr>
-                                <td>${unit.no}</td>
-                                <td>${unit.no_perjanjian}</td>
-                                <td>${unit.nama_nasabah}</td>
-                                <td>${unit.nopol}</td>
-                                <td>${unit.coll}</td>
-                                <td>${unit.pic}</td>
-                                <td>${unit.kategori}</td>
-                                <td>${unit.jto}</td>
-                                <td>${unit.no_rangka}</td>
-                                <td>${unit.no_mesin}</td>
-                                <td>${unit.merk}</td>
-                                <td>${unit.type}</td>
-                                <td>${unit.warna}</td>
-                                <td>${unit.status}</td>
-                                <td>
-                                
-                                 <button class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal"
-                                      data-no_perjanjian="${unit.no_perjanjian}"
-                                      data-nama_nasabah="${unit.nama_nasabah}"
-                                      data-nopol="${unit.nopol}"
-                                      data-coll="${unit.coll}"
-                                      data-pic="${unit.pic}"
-                                      data-kategori="${unit.kategori}"
-                                      data-jto="${unit.jto}"
-                                      data-no_rangka="${unit.no_rangka}"
-                                      data-no_mesin="${unit.no_mesin}"
-                                      data-merk="${unit.merk}"
-                                      data-type="${unit.type}"
-                                      data-warna="${unit.warna}"
-                                      data-status="${unit.status}">
-                                      Edit
-                                  </button>
-
-                                <form action="/cekunit/${unit.id}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
-                                </form>
-                                
-                                </td>
-                            </tr>`;
-                            $('#cekunit-table tbody').append(row);
-                        });
-
-                    // Update pagination
-                    // if (response.pagination) {
-                    //     $('.pagination').html(response.pagination);
-                    // }
-
-                    // Perbarui URL dengan parameter sorting
-                    let newUrl = `{{ route('dashboard') }}?sort=${sortColumn}&direction=${sortDirection}`;
-                    window.history.pushState({ path: newUrl }, '', newUrl);
-                },
-                error: function (xhr) {
-                    console.log(xhr.responseText); // Tampilkan pesan error di console
-                }
-            });
-        });
-    });
-</script>
-
 
 <!-- script download excel dan csv -->
 <script>
@@ -357,6 +252,67 @@
         });
     });
 </script>
+
+
+<!-- script -->
+<script>
+$(document).ready(function() {
+    // Fungsi utama untuk mengambil data
+    function fetchData(page = 1) {
+        const search = $('#search-input').val();
+        const sort = $('#sortColumn').val();
+        const direction = $('#sortDirection').val();
+
+        $.ajax({
+            url: "{{ route('dashboard') }}", // Menggunakan route dashboard
+            method: 'GET',
+            data: {
+                page: page,
+                search: search,
+                sort: sort,
+                direction: direction
+            },
+            success: function(response) {
+                $('#search-results').html(response);
+                updateBrowserURL(page, search, sort, direction);
+            },
+            error: function(xhr) {
+                console.log('Error:', xhr.responseText);
+            }
+        });
+    }
+
+    // Fungsi update URL browser
+    function updateBrowserURL(page, search, sort, direction) {
+        const params = new URLSearchParams({
+            page: page,
+            search: search,
+            sort: sort,
+            direction: direction
+        });
+        const newUrl = `{{ route('dashboard') }}?${params.toString()}`;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+    }
+
+    // Event handler untuk search input
+    $('#search-input').on('input', function() {
+        fetchData(1);
+    });
+
+    // Event handler untuk tombol sort
+    $('#sortButton').on('click', function() {
+        fetchData(1);
+    });
+
+    // Event handler untuk pagination
+    $(document).on('click', '.pagination a', function(event) {
+        event.preventDefault();
+        const page = $(this).attr('href').split('page=')[1];
+        fetchData(page);
+    });
+});
+</script>
+
 
 <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
 <script src="{{ asset('assets/js/config.js') }}"></script>

@@ -6,77 +6,48 @@ use App\Models\cekunit;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use PhpOffice\PhpSpreadsheet\Cell\StringValueBinder;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
-// use Maatwebsite\Excel\Concerns\ShouldQueue;
+use PhpOffice\PhpSpreadsheet\Cell\StringValueBinder;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CekUnitExport implements FromQuery, WithHeadings, WithChunkReading
+class CekUnitExport extends StringValueBinder implements FromQuery, WithHeadings, WithChunkReading, WithCustomValueBinder, ShouldQueue
 {
-    protected $sortColumn;
-    protected $sortDirection;
-
-
-
     public function query()
     {
         return cekunit::orderBy('no', 'asc');
     }
 
-    public function collection(){
-        return cekunit::orderBy('no', 'asc')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    $item->no,
-                    $item->no_perjanjian,
-                    $item->nama_nasabah,
-                    $item->nopol,
-                    $item->coll,
-                    $item->pic,
-                    $item->kategori,
-                    $item->jto,
-                    $item->no_rangka,
-                    $item->no_mesin,
-                    $item->merk,
-                    $item->type,
-                    $item->warna,
-                    $item->status,
-                ];
-            })
-            ->cursor();
-    }
-
     public function headings(): array
     {
         return [
-            'No',
-            'No Perjanjian',
-            'Nama Nasabah',
-            'Nopol',
-            'Coll',
-            'PIC',
-            'Kategori',
-            'JTO',
-            'No Rangka',
-            'No Mesin',
-            'Merk',
-            'Type',
-            'Warna',
-            'Status',
+            'no',
+            'no_perjanjian',
+            'nama_nasabah',
+            'nopol',
+            'coll',
+            'pic',
+            'kategori',
+            'jto',
+            'no_Rangka',
+            'no_Mesin',
+            'merk',
+            'type',
+            'warna',
+            'status',
         ];
     }
 
     public function bindValue(Cell $cell, $value)
     {
-        // Force format semua cell sebagai text
+        // Paksa semua nilai menjadi teks
         $cell->setValueExplicit($value, DataType::TYPE_STRING);
         return true;
     }
-    
+
     public function chunkSize(): int
     {
-        return 100000; // Proses data per 1000 baris
+        return 1000; // Gunakan ukuran yang lebih aman
     }
 }

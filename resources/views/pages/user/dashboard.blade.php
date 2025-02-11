@@ -7,6 +7,7 @@
             <li>
                 <h5 class="bc-title">Data Nasabah</h5>
             </li>
+
             <li class="breadcrumb-item"><a href="javascript:void(0)">
                     <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2.125 6.375L8.5 1.41667L14.875 6.375V14.1667C14.875 14.5424 14.7257 14.9027 14.4601 15.1684C14.1944 15.4341 13.8341 15.5833 13.4583 15.5833H3.54167C3.16594 15.5833 2.80561 15.4341 2.53993 15.1684C2.27426 14.9027 2.125 14.5424 2.125 14.1667V6.375Z" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round" />
@@ -18,6 +19,7 @@
         </ol>
     </div>
 
+
     <div class="container-fluid">
         <div class="row">
             <h1>
@@ -25,180 +27,183 @@
             </h1>
         </div>
     </div>
+
+
     <div class="container-fluid">
-    <div class="card">
 
-    @if (Session::has('success'))
-        <div class="alert alert-success" role="alert">
-            {{ Session::get('success') }}
-        </div>
-    @endif
+        <div class="card">
+            @if (Session::has('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ Session::get('success') }}
+                </div>
+            @endif
 
-    @if (Session::has('error'))
-        <div class="alert alert-danger" role="alert">
-            {{ Session::get('error') }}
-        </div>
-    @endif
+            @if (Session::has('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ Session::get('error') }}
+                </div>
+            @endif
 
+            <div class="card-header">
+                <div class="col-9 ">
+                    <h4 class="">Data Table Cek Unit</h4>
+                </div>
 
-        <h4 class="card-header">Data Table Cek Unit</h4>
-            <input type="text" id="search-input" placeholder="Search..." value="{{ request('search') }}">
-          <div class="table-responsive">
-            <div class="ps-2 pt-3">
-              <!-- dropdown sorting -->
-              <select id="sortColumn">
-                <option value="no">No</option>
-                <option value="nama_nasabah">Nama Nasabah</option>
-                <option value="no_perjanjian">No Perjanjain</option>
-                <option value="nopol">Nopol</option>
-                <option value="coll">Coll</option>
-                <option value="pic">PIC</option>
-                <option value="kategori">Kategori</option>
-                <option value="jto">JTO</option>
-                <option value="no_rangka">No Rangka</option>
-                <option value="no_mesin">No Mesin</option>
-                <option value="merk">Merk</option>
-                <option value="type">Type</option>
-                <option value="warna">Warna</option>
-                <option value="status">Status</option>
-              </select>
+                <div class="col">
+                    <form class="d-flex search" role="search">
+                        <input class="form-control me-2  rounded-pill search-border " type="text" id="search-input" placeholder="Search..." value="{{ request('search') }}">
+                    </form>
+                </div>
+            </div>
+
+            
+            <div class="table-responsive">
+                <div class="ps-2 pt-3">
+                <!-- dropdown sorting -->
+                    <select id="sortColumn">
+                        <option value="no">No</option>
+                        <option value="nama_nasabah">Nama Nasabah</option>
+                        <option value="no_perjanjian">No Perjanjain</option>
+                        <option value="nopol">Nopol</option>
+                        <option value="coll">Coll</option>
+                        <option value="pic">PIC</option>
+                        <option value="kategori">Kategori</option>
+                        <option value="jto">JTO</option>
+                        <option value="no_rangka">No Rangka</option>
+                        <option value="no_mesin">No Mesin</option>
+                        <option value="merk">Merk</option>
+                        <option value="type">Type</option>
+                        <option value="warna">Warna</option>
+                        <option value="status">Status</option>
+                    </select>
   
-              <select id="sortDirection">
-                <option value="asc">Asc</option>
-                <option value="desc">Desc</option>
-              </select>
+                    <select id="sortDirection">
+                        <option value="asc">Asc</option>
+                        <option value="desc">Desc</option>
+                    </select>
   
-              <button id='sortButton' class="btn btn-secondary" style="--bs-btn-padding-y: .20rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem; --bs-btn-border-color: var(--bd-violet-bg);">
-              Sort
-              </button>
-              <div class="dropdown mb-3 mt-3">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                  Pilih Format
-              </button>
+                    <button id='sortButton' class="btn btn-secondary" style="--bs-btn-padding-y: .20rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem; --bs-btn-border-color: var(--bd-violet-bg);">
+                        Sort
+                    </button>
+
+                    <div class="dropdown mb-3 mt-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                            Pilih Format
+                        </button>
   
-              <ul class="dropdown-menu mt-3">
-                <li><a href="#" class="dropdown-item" data-format="csv">Csv(.csv)</a></li>
-              </ul>
+                        <ul class="dropdown-menu mt-3">
+                            <li><a href="#" class="dropdown-item" data-format="csv">Csv(.csv)</a></li>
+                        </ul>
 
-              <a href="#" id="downloadButton" class="btn btn-success">
-                <i class="fas fa-download"></i> 
-                Download
-              </a>
+                        <a href="#" id="downloadButton" class="btn btn-success">
+                            <i class="fas fa-download"></i> 
+                            Download
+                        </a>
+                    </div>
 
-              <!-- Tombol Trigger Modal -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAllModal">
-    Hapus Semua Data
-</button>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="deleteAllModal" tabindex="-1" aria-labelledby="deleteAllModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteAllModalLabel">Konfirmasi Hapus Semua Data</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="deleteAllForm" action="{{ route('cekunit.deleteAll') }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <div class="mb-3">
-                                                <label for="password" class="form-label">Masukkan Password untuk Konfirmasi</label>
-                                                <input type="password" class="form-control" id="password" name="password" required>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                        <button type="submit" form="deleteAllForm" class="btn btn-danger">Hapus Semua Data</button>
-                                    </div>
-                                </div>
-                            </div>
+                    <div id="search-results">
+                        <!-- Data table dimuat di sini melalui AJAX -->
+                        @include('pages.user.pagination_table', ['cekunit' => $cekunit, 'sort' => $sort, 'direction' => $direction])
+                    </div>
+                </div>    
+            </div>
+
+            <!-- modal untuk edit data -->
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
+                        <div class="modal-body">
+                            <!-- Form Edit akan dimuat di sini -->
+                            <form id="editForm" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="form-group pb-3">
+                                    <label for="no_perjanjian">No Perjanjian</label>
+                                    <input type="text" name="no_perjanjian" id="no_perjanjian" class="form-control">
+                                </div>
 
-            <div id="search-results">
-                <!-- Data table dimuat di sini melalui AJAX -->
-                @include('pages.user.pagination_table', ['cekunit' => $cekunit, 'sort' => $sort, 'direction' => $direction])
-          </div>
-          </div>    
-          </div>
+                                <div class="form-group pb-3">
+                                    <label for="nama_nasabah">Nama Nasabah</label>
+                                    <input type="text" name="nama_nasabah" id="nama_nasabah" class="form-control">
+                                </div>
 
-<!-- modal untuk edit data -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Form Edit akan dimuat di sini -->
-                <form id="editForm" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="form-group pb-3">
-                        <label for="no_perjanjian">No Perjanjian</label>
-                        <input type="text" name="no_perjanjian" id="no_perjanjian" class="form-control">
+                                <div class="form-group pb-3">
+                                    <label for="nopol">Nopol</label>
+                                    <input type="text" name="nopol" id="nopol" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="coll">Coll</label>
+                                    <input type="text" name="coll" id="coll" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="pic">PIC</label>
+                                    <input type="text" name="pic" id="pic" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="kategori">Kategori</label>
+                                    <input type="text" name="kategori" id="kategori" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="jto">JTO</label>
+                                    <input type="text" name="jto" id="jto" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="no_rangka">Nomor Rangka</label>
+                                    <input type="text" name="no_rangka" id="no_rangka" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="no_mesin">Nomor Mesin</label>
+                                    <input type="text" name="no_mesin" id="no_mesin" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="merk">Merk</label>
+                                    <input type="text" name="merk" id="merk" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="type">Type</label>
+                                    <input type="text" name="type" id="type" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="warna">Warna</label>
+                                    <input type="text" name="warna" id="warna" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="status">Status</label>
+                                    <input type="text" name="status" id="status" class="form-control">
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                </div>
+                            </form>
+                        </div>
+
                     </div>
-                    <div class="form-group pb-3">
-                        <label for="nama_nasabah">Nama Nasabah</label>
-                        <input type="text" name="nama_nasabah" id="nama_nasabah" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="nopol">Nopol</label>
-                        <input type="text" name="nopol" id="nopol" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="coll">Coll</label>
-                        <input type="text" name="coll" id="coll" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="pic">PIC</label>
-                        <input type="text" name="pic" id="pic" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="kategori">Kategori</label>
-                        <input type="text" name="kategori" id="kategori" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="jto">JTO</label>
-                        <input type="text" name="jto" id="jto" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="no_rangka">Nomor Rangka</label>
-                        <input type="text" name="no_rangka" id="no_rangka" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="no_mesin">Nomor Mesin</label>
-                        <input type="text" name="no_mesin" id="no_mesin" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="merk">Merk</label>
-                        <input type="text" name="merk" id="merk" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="type">Type</label>
-                        <input type="text" name="type" id="type" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="warna">Warna</label>
-                        <input type="text" name="warna" id="warna" class="form-control">
-                    </div>
-                    <div class="form-group pb-3">
-                        <label for="status">Status</label>
-                        <input type="text" name="status" id="status" class="form-control">
-                    </div>
-                    <!-- Tambahkan field lainnya sesuai kebutuhan -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
+    </div>    
 </div>
+
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -241,7 +246,7 @@
     });
 </script>
 
-<!-- Sertakan jQuery -->
+
 <!-- script pagination -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -363,109 +368,53 @@
 </script>
 
 
+
 <!-- script Cari  -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Deteksi perubahan pada input pencarian
+        // Fungsi pencarian AJAX
         $('#search-input').on('input', function() {
-            let search = $(this).val(); // Ambil nilai dari input pencarian
-            let sort = "{{ request('sort', 'no') }}"; // Ambil parameter sort
-            let direction = "{{ request('direction', 'asc') }}"; // Ambil parameter direction
+            let search = $(this).val();
+            fetchData(1, search); // Jalankan AJAX pencarian di halaman pertama
+        });
 
-            // Kirim permintaan AJAX ke server
+        // Fungsi pagination AJAX
+        $(document).on('click', '.pagination a', function(event) {
+            event.preventDefault(); // Mencegah perilaku default link pagination
+            let page = $(this).attr('href').split('page=')[1]; // Ambil nomor halaman dari URL
+            let search = $('#search-input').val(); // Ambil nilai pencarian saat ini
+            fetchData(page, search); // Panggil fungsi fetchData dengan nomor halaman dan search
+        });
+
+        // Fungsi umum untuk mengambil data dengan AJAX
+        function fetchData(page, search) {
+            let sort = "{{ request('sort', 'no') }}"; // Ambil parameter sort dari URL
+            let direction = "{{ request('direction', 'asc') }}"; // Ambil parameter direction dari URL
+
             $.ajax({
-                url: "{{ route('dashboard') }}", // URL route untuk pencarian
+                url: "{{ route('search') }}", // URL tujuan AJAX
                 method: 'GET',
                 data: {
-                    search: search, // Parameter pencarian
-                    sort: sort, // Parameter sort
-                    direction: direction // Parameter direction
+                    page: page,
+                    search: search,
+                    sort: sort,
+                    direction: direction
                 },
                 success: function(response) {
-                    // Update tabel dengan hasil pencarian
-                    $('#search-results').html(response);
+                    $('#search-results').html(response); // Perbarui tabel tanpa reload halaman
+                    
+                    let newUrl = `{{ route('dashboard') }}?search=${search}&sort=${sortColumn}&direction=${sortDirection}`;
+                    window.history.pushState({ path: newUrl }, '', newUrl);
                 },
+                
                 error: function(xhr) {
-                    console.log(xhr.responseText); // Tampilkan error di console (opsional)
+                    console.log('Error:', xhr.responseText);
                 }
             });
-        });
-    });
-</script>
-
-<!-- script Pop Up Deleter all data -->
-<script>
-    document.getElementById('deleteAllForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Mencegah form dikirim secara default
-
-        // Ambil nilai password
-        const password = document.getElementById('password').value;
-
-        // Lakukan validasi password (contoh sederhana)
-        if (password.trim() === '') {
-            alert('Password tidak boleh kosong!');
-            return;
         }
-
-        // Jika validasi berhasil, kirim form
-        this.submit();
-    });
-</script>
-<!-- script Cari  -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Deteksi perubahan pada input pencarian
-        $('#search-input').on('input', function() {
-            let search = $(this).val(); // Ambil nilai dari input pencarian
-            let sort = "{{ request('sort', 'no') }}"; // Ambil parameter sort
-            let direction = "{{ request('direction', 'asc') }}"; // Ambil parameter direction
-
-            console.log('Search:', search); // Debugging: Cek nilai search
-            console.log('Sort:', sort); // Debugging: Cek nilai sort
-            console.log('Direction:', direction); // Debugging: Cek nilai direction
-
-            // Kirim permintaan AJAX ke server
-            $.ajax({
-                url: "{{ route('dashboard') }}", // URL route untuk pencarian
-                method: 'GET',
-                data: {
-                    search: search, // Parameter pencarian
-                    sort: sort, // Parameter sort
-                    direction: direction // Parameter direction
-                },
-                success: function(response) {
-                    console.log('Response:', response); // Debugging: Cek response dari server
-                    // Update tabel dengan hasil pencarian
-                    $('#search-results').html(response);
-                },
-                error: function(xhr) {
-                    console.log('Error:', xhr.responseText); // Tampilkan error di console (opsional)
-                }
-            });
-        });
     });
 </script>
 
-<!-- script Pop Up Deleter all data -->
-<script>
-    document.getElementById('deleteAllForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Mencegah form dikirim secara default
-
-        // Ambil nilai password
-        const password = document.getElementById('password').value;
-
-        // Lakukan validasi password (contoh sederhana)
-        if (password.trim() === '') {
-            alert('Password tidak boleh kosong!');
-            return;
-        }
-
-        // Jika validasi berhasil, kirim form
-        this.submit();
-    });
-</script>
 <!-- script download excel dan csv -->
 <script>
     $(document).ready(function() {

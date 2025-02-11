@@ -18,64 +18,54 @@
             <th>Action</th>
         </tr>
     </thead>
-
     <tbody>
-    @foreach($cekunit as $unit)
+        @foreach($cekunit as $unit)
+            <tr>
+                <td>{{ $unit->no ?? 'null' }}</td>
+                <td>{{ $unit->no_perjanjian ?? 'null' }}</td>
+                <td>{{ $unit->nama_nasabah ?? 'null' }}</td>
+                <td>{{ $unit->nopol ?? 'null' }}</td>
+                <td>{{ $unit->coll ?? 'null' }}</td>
+                <td>{{ $unit->pic ?? 'null' }}</td>
+                <td>{{ $unit->kategori ?? 'null' }}</td>
+                <td>{{ $unit->jto ?? 'null' }}</td>
+                <td>{{ $unit->no_rangka ?? 'null' }}</td>
+                <td>{{ $unit->no_mesin ?? 'null' }}</td>
+                <td>{{ $unit->merk ?? 'null' }}</td>
+                <td>{{ $unit->type ?? 'null' }}</td>
+                <td>{{ $unit->warna ?? 'null' }}</td>
+                <td>{{ $unit->status ?? 'null' }}</td>
+                <td>
+                    <button class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" 
+                        data-no_perjanjian="{{ $unit->no_perjanjian }}" 
+                        data-nama_nasabah="{{ $unit->nama_nasabah }}"
+                        data-nopol="{{ $unit->nopol }}"
+                        data-coll="{{ $unit->coll }}"
+                        data-pic="{{ $unit->pic }}"
+                        data-kategori="{{ $unit->kategori }}"
+                        data-jto="{{ $unit->jto }}"
+                        data-no_rangka="{{ $unit->no_rangka }}"
+                        data-no_mesin="{{ $unit->no_mesin }}"
+                        data-merk="{{ $unit->merk }}"
+                        data-type="{{ $unit->type }}"
+                        data-warna="{{ $unit->warna }}"
+                        data-status="{{ $unit->status }}">
+                        Edit
+                    </button>
+                    <form action="{{ route('cekunit.destroy', $unit->no_perjanjian) }}" method="post" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda yakin menghapus data ini?')"> Hapus </button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+    <tfoot>
         <tr>
-            <td>{{ $unit->no ?? 'null' }}</td>
-            <td>{{ $unit->no_perjanjian ?? 'null' }}</td>
-            <td>{{ $unit->nama_nasabah ?? 'null' }}</td>
-            <td>{{ $unit->nopol ?? 'null' }}</td>
-            <td>{{ $unit->coll ?? 'null' }}</td>
-            <td>{{ $unit->pic ?? 'null' }}</td>
-            <td>{{ $unit->kategori ?? 'null' }}</td>
-            <td>{{ $unit->jto ?? 'null' }}</td>
-            <td>{{ $unit->no_rangka ?? 'null' }}</td>
-            <td>{{ $unit->no_mesin ?? 'null' }}</td>
-            <td>{{ $unit->merk ?? 'null' }}</td>
-            <td>{{ $unit->type ?? 'null' }}</td>
-            <td>{{ $unit->warna ?? 'null' }}</td>
-            <td>{{ $unit->status ?? 'null' }}</td>
-            <td>
-            
-            <button class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" 
-                data-no_perjanjian="{{ $unit->no_perjanjian }}" 
-                data-nama_nasabah="{{ $unit->nama_nasabah }}"
-                data-nopol="{{ $unit->nopol }}"
-                data-coll="{{ $unit->coll }}"
-                data-pic="{{ $unit->pic }}"
-                data-kategori="{{ $unit->kategori }}"
-                data-jto="{{ $unit->jto }}"
-                data-no_rangka="{{ $unit->no_rangka }}"
-                data-no_mesin="{{ $unit->no_mesin }}"
-                data-merk="{{ $unit->merk }}"
-                data-type="{{ $unit->type }}"
-                data-warna="{{ $unit->warna }}"
-                data-status="{{ $unit->status }}">
-                Edit
-            </button>
-
-            <form action="{{route ('cekunit.destroy',$unit->no_perjanjian)}}" method="post" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda yakin menghapus data ini?')"> Hapus </button>
-            </form>
+            <td colspan="15" class="text-center">
+                {{ $cekunit->appends(['search' => request('search'), 'sort' => $sort, 'direction' => $direction])->links('pagination::bootstrap-4') }}
             </td>
         </tr>
-    @endforeach
-    </tbody>
-
-<tfoot>
-    <tr>
-        <td colspan="13" class="text-center" >
-        {{ $cekunit->appends(['sort' => $sort, 'direction' => $direction, 'search' => request('search')])->links('pagination::bootstrap-4') }}
-        </td>
-        </td>
-    </tr>
-</tfoot>
-
-
-
+    </tfoot>
 </table>
-
-

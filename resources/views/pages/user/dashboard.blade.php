@@ -211,6 +211,46 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script>
+    $(document).ready(function() {
+        // Ketika tombol edit diklik
+        $(document).on('click', '.edit-btn', function() {
+            // Ambil data dari atribut data-*
+            var no_perjanjian = $(this).data('no_perjanjian');
+            var nama_nasabah = $(this).data('nama_nasabah');
+            var nopol = $(this).data('nopol');
+            var coll = $(this).data('coll');
+            var pic = $(this).data('pic');
+            var kategori = $(this).data('kategori');
+            var jto = $(this).data('jto');
+            var no_rangka = $(this).data('no_rangka');
+            var no_mesin = $(this).data('no_mesin');
+            var merk = $(this).data('merk');
+            var type = $(this).data('type');
+            var warna = $(this).data('warna');
+            var status = $(this).data('status');
+
+            // Isi form di modal dengan data yang sesuai
+            $('#editForm').attr('action', '/cekunit/' + no_perjanjian); // Set action form
+            $('#no_perjanjian').val(no_perjanjian);
+            $('#nama_nasabah').val(nama_nasabah);
+            $('#nopol').val(nopol);
+            $('#coll').val(coll);
+            $('#pic').val(pic);
+            $('#kategori').val(kategori);
+            $('#jto').val(jto);
+            $('#no_rangka').val(no_rangka);
+            $('#no_mesin').val(no_mesin);
+            $('#merk').val(merk);
+            $('#type').val(type);
+            $('#warna').val(warna);
+            $('#status').val(status);
+
+            // Jika ada field lain, isi di sini
+        });
+    });
+</script>
+
 <!-- script download excel dan csv -->
 <script>
     $(document).ready(function() {

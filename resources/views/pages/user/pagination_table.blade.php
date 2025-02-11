@@ -65,6 +65,7 @@
         <tr>
             <td colspan="13" class="text-center">
                 {{ $cekunit->appends([
+                    'search' => request('search'),
                     'sort' => request('sort'),
                     'direction' => request('direction')
                 ])->links('pagination::bootstrap-4') }}

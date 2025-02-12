@@ -37,6 +37,7 @@
                 <td>{{ $unit->status ?? 'null' }}</td>
                 <td>
                     <button class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" 
+                        data-no="{{ $unit->no }}" 
                         data-no_perjanjian="{{ $unit->no_perjanjian }}" 
                         data-nama_nasabah="{{ $unit->nama_nasabah }}"
                         data-nopol="{{ $unit->nopol }}"
@@ -52,7 +53,7 @@
                         data-status="{{ $unit->status }}">
                         Edit
                     </button>
-                    <form action="{{ route('cekunit.destroy', $unit->no_perjanjian) }}" method="post" style="display:inline;">
+                    <form action="{{ route('cekunit.destroy', $unit->no) }}" method="post" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda yakin menghapus data ini?')"> Hapus </button>

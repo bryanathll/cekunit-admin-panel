@@ -31,6 +31,14 @@
 
     <div class="container-fluid">
 
+        <div class="d-flex justify-content-end mt-3">
+            <form id="deleteAllForm" action="{{ route('cekunit.deleteAll') }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <h5 id="deleteAllButton" style="cursor: pointer;" class="text-danger"><ins>Hapus Semua Data</ins></h5>
+            </form>
+        </div>
+
         <div class="card">
             @if (Session::has('success'))
                 <div class="alert alert-success" role="alert">
@@ -43,6 +51,8 @@
                     {{ Session::get('error') }}
                 </div>
             @endif
+            
+
 
             <div class="card-header">
                 <div class="col-9 ">
@@ -100,7 +110,7 @@
                             Download
                         </a>
                     </div>
-
+                        
 
                     <div id="search-results">
                         @include('pages.user.pagination_table', [
@@ -216,6 +226,7 @@
         // Ketika tombol edit diklik
         $(document).on('click', '.edit-btn', function() {
             // Ambil data dari atribut data-*
+            var no = $(this).data('no');
             var no_perjanjian = $(this).data('no_perjanjian');
             var nama_nasabah = $(this).data('nama_nasabah');
             var nopol = $(this).data('nopol');
@@ -231,7 +242,7 @@
             var status = $(this).data('status');
 
             // Isi form di modal dengan data yang sesuai
-            $('#editForm').attr('action', '/cekunit/' + no_perjanjian); // Set action form
+            $('#editForm').attr('action', '/cekunit/' + no); // Set action form
             $('#no_perjanjian').val(no_perjanjian);
             $('#nama_nasabah').val(nama_nasabah);
             $('#nopol').val(nopol);
@@ -250,9 +261,6 @@
         });
     });
 </script>
-
-<!-- Sertakan jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- script download excel dan csv -->
 <script>
@@ -280,6 +288,33 @@
         });
     });
 </script>
+
+<!-- script deleteAll -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteAllButton = document.getElementById('deleteAllButton');
+
+        if (deleteAllButton) {
+            deleteAllButton.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                Swal.fire({
+                    title: 'Yakin Untuk DELETE SEMUA DATA?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('deleteAllForm').submit();
+                    }
+                });
+            });
+        }
+    });
+</script>
+
 
 <!-- script -->
 <script>

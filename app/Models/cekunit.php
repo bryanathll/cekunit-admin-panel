@@ -13,8 +13,9 @@ class cekunit extends Model
 
     protected $table = 'cekunit';
     public $timestamps = false;
-    protected $primaryKey = 'no_perjanjian';
-    protected $keyType = 'string';
+    protected $primaryKey = 'no';
+    protected $keyType = 'integer';
+    public $incrementing = true; 
 
     protected $fillable=[
         'no',

@@ -54,7 +54,7 @@ class cekunitController extends Controller
         // Jika bukan AJAX, kembalikan view lengkap
         return view('pages.user.dashboard', compact('cekunit', 'sort', 'direction', 'search'));
     }
-// ============================================== end Controller index ================================================
+// ================================================ end Controller index ==================================================
 
 
 
@@ -81,9 +81,9 @@ class cekunitController extends Controller
 
 
 // ============================================== start Controller edit ===============================================
-    public function edit($no_perjanjian)
+    public function edit($no)
         {
-            $unit = cekunit::find($no_perjanjian);
+            $unit = cekunit::find($no);
             return view('cekunit.edit', compact('unit'));
         }
 // =============================================== end Controller edit ================================================ 
@@ -91,9 +91,9 @@ class cekunitController extends Controller
 
     
 // ============================================= start Controller delete =============================================
-    public function destroy($no_perjanjian)
+    public function destroy($no)
         {
-            $unit = cekunit::find($no_perjanjian);
+            $unit = cekunit::find($no);
             $unit->delete();
             return redirect()->route('dashboard')->with('success', 'Hapus Data Berhasil');
         }
@@ -102,9 +102,9 @@ class cekunitController extends Controller
 
 
 // ============================================= Start Controller update =============================================
-    public function update(Request $request, $no_perjanjian)
+    public function update(Request $request, $no)
         {
-            $unit = cekunit::find($no_perjanjian);
+            $unit = cekunit::find($no);
             $unit->update($request->all());
             return redirect()->route('dashboard')->with('success', 'Edit Data Berhasil');
         }
@@ -157,9 +157,9 @@ class cekunitController extends Controller
 
 
 // ============================================== start Controller show ============================================== 
-    public function show($no_perjanjian)
+    public function show($no)
         {
-            $unit = cekunit::find($no_perjanjian);
+            $unit = cekunit::find($no);
             return view('user.cekunit.show', compact('unit'));
         }
 // =============================================== end Controller show =============================================== 
@@ -252,4 +252,17 @@ public function import(Request $request) {
         return redirect()->back()->with('success', 'Data berhasil diimpor!');
     }
 // ============================================== end Controller import ============================================== 
+
+
+
+// ============================================ start Controller deleteAll =========================================== 
+    public function deleteAll()
+    {
+        // Hapus semua data berdasarkan kolom 'no'
+        cekunit::query()->delete();
+        
+        // Redirect dengan pesan sukses
+        return redirect()->route('dashboard')->with('success', 'Semua data berhasil dihapus.');
+    }
+// ============================================= end Controller deleteAll ============================================ 
 }

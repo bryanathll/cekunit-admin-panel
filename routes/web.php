@@ -69,10 +69,15 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
 
     Route::post('/input_user/insert', [cekunitController::class, 'import'])->name('input.data.import');
 
+    Route::delete('/delete-all', [cekunitController::class, 'deleteAll'])->name('cekunit.deleteAll');
+
 
 });
 
-Route::resource('cekunit', cekunitController::class);
+Route::resource('cekunit', cekunitController::class)->parameters([
+    'cekunit' => 'no'
+]);
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

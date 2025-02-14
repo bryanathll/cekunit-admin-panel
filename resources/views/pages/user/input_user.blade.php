@@ -18,7 +18,24 @@
             <td>{{ $input->created_at ?? 'null' }}</td>
             <td>{{ $input->userID ?? 'null' }}</td>
             <td>{{ $input->nopol ?? 'null' }}</td>
-            <td>{{ $input->lokasi ?? 'null' }}</td>
+            <td>
+                @php
+                    $location = $input->lokasi ?? null;
+                    if($location){
+                        $location = str_replace(['LatLng(lat: ', ')'], '', $location);
+                        list($lat, $lng) = explode(', lng: ', $location);
+                    }
+
+                @endphp
+
+                @if($location)
+                    <a href="https://www.google.com/maps?q={{ $lat }}, {{$lng}}" target="_blank" class="text-info">
+                        {{ $lat }}, {{ $lng }}
+                    </a>
+                @else
+                    null
+                @endif
+            </td>
             <td>{{ $input->ForN ?? 'null' }}</td>
             <td>{{ $input->nama ?? 'null' }}</td>
         </tr>
@@ -29,7 +46,6 @@
         <tr>
             <td colspan="13" class="text-center">
                 {{ $input_user->appends([
-                    'search' => request('search'),
                     'sort' => request('sort'),
                     'direction' => request('direction')
                 ])->links('pagination::bootstrap-4') }}

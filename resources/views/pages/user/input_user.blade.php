@@ -8,6 +8,9 @@
             <th>Lokasi</th>
             <th>ForN</th>
             <th>Nama</th>
+            <th>Kategori</th>
+            <th>Nama Nasabah</th>
+            <th>No Perjanjain</th>
         </tr>
     </thead>
 
@@ -38,6 +41,9 @@
             </td>
             <td>{{ $input->ForN ?? 'null' }}</td>
             <td>{{ $input->nama ?? 'null' }}</td>
+            <td>{{ $input->kategori ?? 'null' }}</td>
+            <td>{{ $input->nama_nasabah ?? 'null' }}</td>
+            <td>{{ $input->no_perjanjian ?? 'null' }}</td>
         </tr>
     @endforeach
     </tbody>

@@ -15,6 +15,7 @@
             <th>Type</th>
             <th>Warna</th>
             <th>Status</th>
+            <th>Actual Penyelesaian</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -35,6 +36,7 @@
                 <td>{{ $unit->type ?? 'null' }}</td>
                 <td>{{ $unit->warna ?? 'null' }}</td>
                 <td>{{ $unit->status ?? 'null' }}</td>
+                <td>{{ $unit->actual_penyelesaian ?? 'null' }}</td>
                 <td>
                     <button class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" 
                         data-no="{{ $unit->no }}" 
@@ -50,7 +52,8 @@
                         data-merk="{{ $unit->merk }}"
                         data-type="{{ $unit->type }}"
                         data-warna="{{ $unit->warna }}"
-                        data-status="{{ $unit->status }}">
+                        data-status="{{ $unit->status }}"
+                        data-actual_penyelesaian="{{ $unit->actual_penyelesaian }}">
                         Edit
                     </button>
                     <form action="{{ route('cekunit.destroy', $unit->no) }}" method="post" style="display:inline;">

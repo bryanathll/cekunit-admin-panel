@@ -54,32 +54,32 @@ class cekunitController extends Controller
         // Jika bukan AJAX, kembalikan view lengkap
         return view('pages.user.dashboard', compact('cekunit', 'sort', 'direction', 'search'));
     }
-// ================================================ end Controller index ==================================================
-
-
-
-// ============================================ start Controller input_user ================================================ 
-    public function input_user(Request $request) {
-        $sort = $request->query('sort', 'id');
-        $direction = $request->query('direction', 'asc');
-
-        $input_user = input_user::orderBy($sort, $direction)
-            ->paginate(20)
-            ->appends([
-                'sort' => $sort,
-                'direction' => $direction
-            ]);
+// ================================================ end Controller index ==============================================
+    
+    
+    
+// ============================================ start Controller input_user =========================================== 
+public function input_user(Request $request) {
+    $sort = $request->query('sort', 'id');
+    $direction = $request->query('direction', 'asc');
+    
+    $input_user = input_user::orderBy($sort, $direction)
+    ->paginate(20)
+    ->appends([
+        'sort' => $sort,
+        'direction' => $direction
+    ]);
 
         if ($request->ajax()) {
             return view('pages.user.input_user', compact('input_user', 'sort', 'direction'))->render();
         }
-
+        
         return view('pages.user.input_user_table', compact('input_user', 'sort', 'direction'));
     }
-// ============================================== end Controller input_user ================================================
-
-
-
+// ============================================== end Controller input_user ===========================================
+    
+    
+    
 // ============================================== start Controller edit ===============================================
     public function edit($no)
         {
@@ -195,6 +195,7 @@ public function import(Request $request) {
         }
     
         $dataToInsert = [];
+
     
         // Proses setiap baris data
         foreach ($csvData as $row) {
@@ -202,12 +203,13 @@ public function import(Request $request) {
             if (count($row) !== count($header)) {
                 continue;
             }
-    
+            
             $data = array_combine($header, $row);
-    
+
             // Validasi data
             $validator = Validator::make($data, [
                 'no_perjanjian' => 'nullable|string',
+                'nama_nasabah' => 'nullable|string',
                 'nopol' => 'nullable|string',
                 'coll' => 'nullable|string',
                 'pic' => 'nullable|string',
@@ -219,6 +221,7 @@ public function import(Request $request) {
                 'type' => 'nullable|string',
                 'warna' => 'nullable|string',
                 'status' => 'nullable|string',
+                'actual_penyelesaian' => 'nullable|string',
             ]);
     
             if ($validator->fails()) {
@@ -240,16 +243,17 @@ public function import(Request $request) {
                 'type' => !empty($data['type']) ? (string) $data['type'] : null,
                 'warna' => !empty($data['warna']) ? (string) $data['warna'] : null,
                 'status' => !empty($data['status']) ? (string) $data['status'] : null,
-                
+                'actual_penyelesaian' => !empty($data['actual_penyelesaian']) ? (string) $data['actual_penyelesaian'] : null,
             ];
         }
+        
     
         // Insert data ke database dalam batch
-        foreach (array_chunk($dataToInsert, 5000) as $batch) {
+        foreach (array_chunk($dataToInsert, 2000) as $batch) {
             DB::table('cekunit')->insert($batch);
         }
     
-        return redirect()->back()->with('success', 'Data berhasil diimpor!');
+        return redirect()->back()->with('success', 'Data berhasil diinsert!');
     }
 // ============================================== end Controller import ============================================== 
 

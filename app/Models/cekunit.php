@@ -31,7 +31,8 @@ class cekunit extends Model
         'merk',
         'type',
         'warna',
-        'status'
+        'status',
+        'actual_penyelesaian'
     ];
 }
 

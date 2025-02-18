@@ -30,12 +30,13 @@ class CekUnitExport extends StringValueBinder implements FromQuery, WithHeadings
             'pic',
             'kategori',
             'jto',
-            'no_Rangka',
-            'no_Mesin',
+            'no_rangka',
+            'no_mesin',
             'merk',
             'type',
             'warna',
             'status',
+            'actual_penyelesaian',
         ];
     }
 

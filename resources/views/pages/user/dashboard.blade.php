@@ -85,6 +85,7 @@
                         <option value="type">Type</option>
                         <option value="warna">Warna</option>
                         <option value="status">Status</option>
+                        <option value="actual_penyelesaian">Actual Penyelesaian</option>
                     </select>
   
                     <select id="sortDirection">
@@ -203,6 +204,11 @@
                                     <input type="text" name="status" id="status" class="form-control">
                                 </div>
 
+                                <div class="form-group pb-3">
+                                    <label for="actual_penyelesaian">Actual Penyelesaian</label>
+                                    <input type="text" name="actual_penyelesaian" id="actual_penyelesaian" class="form-control">
+                                </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                     <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
@@ -240,6 +246,7 @@
             var type = $(this).data('type');
             var warna = $(this).data('warna');
             var status = $(this).data('status');
+            var actual_penyelesaian = $(this).data('actual_penyelesaian');
 
             // Isi form di modal dengan data yang sesuai
             $('#editForm').attr('action', '/cekunit/' + no); // Set action form
@@ -256,7 +263,7 @@
             $('#type').val(type);
             $('#warna').val(warna);
             $('#status').val(status);
-
+            $('#actual_penyelesaian').val(actual_penyelesaian);
             // Jika ada field lain, isi di sini
         });
     });

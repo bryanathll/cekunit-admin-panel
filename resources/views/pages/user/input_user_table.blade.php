@@ -20,6 +20,22 @@
 
 
     <div class="container-fluid">
+
+        <div class="dropdown mb-3 mt-5">
+            <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+              Pilih Format
+            </button>
+  
+            <ul class="dropdown-menu mt-3">
+                <li><a href="#" class="dropdown-item" data-format="csv">Csv(.csv)</a></li>
+            </ul>
+
+            <a href="#" id="downloadButton" class="btn btn-success btn-sm">
+                <i class="fas fa-download"></i> 
+                Download
+            </a>
+        </div>
+
     <div class="card">
 
 
@@ -42,30 +58,14 @@
                 <option value="desc">Desc</option>
               </select>
   
-              <button id='sortButton' class="btn btn-secondary" style="--bs-btn-padding-y: .20rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem; --bs-btn-border-color: var(--bd-violet-bg);">
-              Sort
+              <button id='sortButton' class="btn btn-primary">
+                Sort
               </button>
-              <div class="dropdown mb-3 mt-3">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                  Pilih Format
-              </button>
-  
-              <ul class="dropdown-menu mt-3">
-                <li><a href="#" class="dropdown-item" data-format="csv">Csv(.csv)</a></li>
-              </ul>
 
-              <a href="#" id="downloadButton" class="btn btn-success">
-                <i class="fas fa-download"></i> 
-                Download
-              </a>
-
-            </div>
-
-
-            </div>
+            <div class="mt-5">
                 <!-- Data table dimuat di sini melalui AJAX -->
                 @include('pages.user.input_user', ['sort' => $sort, 'direction' => $direction])
-          </div>
+            </div>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

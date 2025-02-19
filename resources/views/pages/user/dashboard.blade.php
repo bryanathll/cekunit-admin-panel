@@ -36,7 +36,7 @@
             <!-- dropdown download -->
             <div class="col-3">
                 <div class="dropdown mb-2 mt-3">
-                    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                    <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
                         Pilih Format
                     </button>
   
@@ -51,8 +51,8 @@
             </div>
 
             <!-- dropdown hapus by kategori -->
-            <div class="col-3 mt-3">
-                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="combinedDropdown" data-bs-toggle="dropdown" > 
+            <div class="col-9 mt-3 text-end">
+                <button class="btn btn-outline-danger dropdown-toggle btn-sm" type="button" id="combinedDropdown" data-bs-toggle="dropdown" > 
                     Hapus Data By Kategori
                 </button>
 
@@ -85,7 +85,7 @@
                         </div>
 
                         <div class="col-12 mt-3">
-                            <button class="btn btn-danger w-100 btn-sm" id="deleteAllButton">
+                            <button class="btn btn-outline-danger w-100 btn-sm" id="deleteAllButton">
                                 <form id="deleteAllForm" action="{{ route('cekunit.deleteAll') }}" method="POST">
                                     @csrf
                                     @method('DELETE')
@@ -93,7 +93,6 @@
                                 </form>
                             </button>
                         </div>
-
                     </div>
                 </ul>
             </div>
@@ -127,13 +126,13 @@
 
                 <div class="col">
                     <form class="d-flex search" role="search">
-                        <input class="form-control me-2  rounded-pill search-border " type="text" id="search-input" placeholder="Search..." value="{{ request('search') }}">
+                        <input class="form-control me-2  rounded-pill search-border " type="text" id="search-input" placeholder="Cari..." value="{{ request('search') }}">
                     </form>
                 </div>
             </div>
 
             
-            <div class="table-responsive">
+            <div class="table-responsive ">
                 <div class="ps-2 pt-3">
                 <!-- dropdown sorting -->
                     <select id="sortColumn">
@@ -159,14 +158,14 @@
                         <option value="desc">Desc</option>
                     </select>
   
-                    <button id='sortButton' class="btn btn-secondary    ">
+                    <button id='sortButton' class="btn btn-primary    ">
                         Sort
                     </button>                     
 
 
                         
 
-                    <div id="search-results">
+                    <div id="search-results" class="pt-5">
                         @include('pages.user.pagination_table', [
                             'cekunit' => $cekunit,
                             'sort' => $sort,

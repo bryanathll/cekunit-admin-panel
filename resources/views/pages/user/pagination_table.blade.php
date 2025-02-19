@@ -38,7 +38,7 @@
                 <td>{{ $unit->status ?? 'null' }}</td>
                 <td>{{ $unit->actual_penyelesaian ?? 'null' }}</td>
                 <td>
-                    <button class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" 
+                    <button class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" 
                         data-no="{{ $unit->no }}" 
                         data-no_perjanjian="{{ $unit->no_perjanjian }}" 
                         data-nama_nasabah="{{ $unit->nama_nasabah }}"

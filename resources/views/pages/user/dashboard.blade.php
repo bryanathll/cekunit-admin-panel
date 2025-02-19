@@ -31,14 +31,80 @@
 
     <div class="container-fluid">
 
-        <div class="d-flex justify-content-end mt-3">
-            <form id="deleteAllForm" action="{{ route('cekunit.deleteAll') }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <h5 id="deleteAllButton" style="cursor: pointer;" class="text-danger"><ins>Hapus Semua Data</ins></h5>
-            </form>
-        </div>
 
+        <div class="row dropdown ">
+            <!-- dropdown download -->
+            <div class="col-3">
+                <div class="dropdown mb-2 mt-3">
+                    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                        Pilih Format
+                    </button>
+  
+                    <ul class="dropdown-menu mt-3">
+                        <li><a href="#" class="dropdown-item" data-format="csv">Csv(.csv)</a></li>
+                    </ul>
+                    <a href="#" id="downloadButton" class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> 
+                        Download
+                    </a>
+                </div>
+            </div>
+
+            <!-- dropdown hapus by kategori -->
+            <div class="col-3 mt-3">
+                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="combinedDropdown" data-bs-toggle="dropdown" > 
+                    Hapus Data By Kategori
+                </button>
+
+                <ul class="dropdown-menu p-3" style="max-width: 400px;" >
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <select id="columnSelect" class="form-select">
+                                <!-- Dropdown untuk memilih kolom -->
+                                <option value="">Pilih Kolom</option>
+                                <option value="kategori">Kategori</option>
+                                <option value="status">Status</option>
+                                <option value="actual_penyelesaian">Actual Penyelesaian</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <select id="valueSelect" class="form-select" disabled>
+                                <!-- Dropdown untuk memilih nilai -->
+                                <option value="">Pilih Nilai</option>
+                                <option value="null">null</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 mt-2">
+                            <!-- Tombol Hapus -->
+                            <button class="btn btn-danger w-100 btn-sm" id="deleteButton" disabled>
+                                <i class="fas fa-trash me-2"></i>
+                                Hapus Data
+                            </button>
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <button class="btn btn-danger w-100 btn-sm" id="deleteAllButton">
+                                <form id="deleteAllForm" action="{{ route('cekunit.deleteAll') }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    Hapus Semua Data
+                                </form>
+                            </button>
+                        </div>
+
+                    </div>
+                </ul>
+            </div>
+
+            
+        </div>
+        
+
+        <!-- Pesan Sukses/Gagal -->
+        <div id="message"></div>
+        
         <div class="card">
             @if (Session::has('success'))
                 <div class="alert alert-success" role="alert">
@@ -93,24 +159,11 @@
                         <option value="desc">Desc</option>
                     </select>
   
-                    <button id='sortButton' class="btn btn-secondary" style="--bs-btn-padding-y: .20rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem; --bs-btn-border-color: var(--bd-violet-bg);">
+                    <button id='sortButton' class="btn btn-secondary    ">
                         Sort
-                    </button>
+                    </button>                     
 
-                    <div class="dropdown mb-3 mt-3">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                            Pilih Format
-                        </button>
-  
-                        <ul class="dropdown-menu mt-3">
-                            <li><a href="#" class="dropdown-item" data-format="csv">Csv(.csv)</a></li>
-                        </ul>
 
-                        <a href="#" id="downloadButton" class="btn btn-success">
-                            <i class="fas fa-download"></i> 
-                            Download
-                        </a>
-                    </div>
                         
 
                     <div id="search-results">
@@ -118,7 +171,7 @@
                             'cekunit' => $cekunit,
                             'sort' => $sort,
                             'direction' => $direction,
-                            'search' => $search
+                            'search' => $search,
                         ])
                     </div>
                 </div>    
@@ -382,6 +435,142 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+    $(document).ready(function() {
+
+        // Saat kolom dipilih
+
+
+
+
+
+        
+    });
+    // fungsi untuk reload dropdown data
+    function reloadDropdown() {
+        const column = $('#columnSelect').val(); // Ambil nilai dropdown pertama
+
+            if (column) {
+                $.ajax({
+                    url: "{{ route('cekunit.getUniqueValues') }}",
+                    method: 'GET',
+                    data: { column: column },
+                    success: function(response) {
+                        $('#valueSelect').empty().append('<option value="">Pilih Nilai</option>');
+
+                        if (Array.isArray(response)) {
+                            response.forEach(function(value) {
+                                $('#valueSelect').append(`<option value="${value}">${value}</option>`);
+                            });
+                         }
+                        $('#valueSelect').prop('disabled', response.length === 0);
+                    },
+                    error: function(xhr) {
+                        $('#message').html('<div class="alert alert-danger">Gagal mengambil data.</div>');
+                    }
+                });
+            }
+        }
+
+</script>
+
+<script>
+    $(document).ready(function(){
+        // saat dropdown dibuka
+        $('#combinedDropdown').on('show.bs.dropdown', function(){
+            // reset state
+            $('columnSelect').val('');
+            $('valueSelect').val('').prop('disabled', true);
+            $('deleteButton').val('').prop('disabled', true);
+        });
+
+        // saat kolom dipilih
+        $('#columnSelect').on('change', function() {
+            const column = $(this).val();
+
+            if (column) {
+                // Ambil data unik dari server
+                $.ajax({
+                    url: "{{ route('cekunit.getUniqueValues') }}",
+                    method: 'GET',
+                    data: { column: column },
+                    success: function(response) {
+                        $('#valueSelect').empty().append('<option value="">Pilih Nilai</option>');
+
+                        $('#valueSelect').append('<option value="null"> null </option>')
+
+                        response.forEach(function(value) {
+                            $('#valueSelect').append(`<option value="${value}">${value}</option>`);
+                        });
+
+                        $('#valueSelect').prop('disabled', false);
+                    },
+                    error: function(xhr) {
+                        $('#message').html('<div class="alert alert-danger">Gagal mengambil data.</div>');
+                    }
+                });
+
+            } else {
+                $('#valueSelect').empty().append('<option value="">Pilih Nilai</option>').prop('disabled', true);
+                $('#deleteButton').prop('disabled', true);
+            }
+        });
+
+                // Saat nilai dipilih
+                $('#valueSelect').on('change', function() {
+            $('#deleteButton').prop('disabled', !$(this).val());
+        });
+
+        // Saat tombol hapus diklik
+        $('#deleteButton').on('click', function() {
+            const column = $('#columnSelect').val();
+            const value = $('#valueSelect').val();
+
+            if (column && value) {
+                if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                    $.ajax({
+                        url: "{{ route('cekunit.deleteByCategory') }}",
+                        method: 'POST',
+                        data: {
+                            column: column,
+                            value: value,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            $('#message').html('<div class="alert alert-success">Data berhasil dihapus!</div>');
+                            $('#valueSelect').empty().append('<option value="">Pilih Nilai</option>').prop('disabled', true);
+                            $('#deleteButton').prop('disabled', true);
+                            
+                            // muat ulang data table
+                            loadTableData();
+
+                            // muat ulang dropdown data
+                            reloadDropdown();
+                        },
+                        error: function(xhr) {
+                            $('#message').html('<div class="alert alert-danger">Gagal menghapus data.</div>');
+                        }
+                    });
+                }
+            }
+        });
+
+        // fungsi untuk reload data di dalam table setelah button hapus di klik
+        function loadTableData(){
+            $.ajax({
+                url: "{{ route('dashboard') }}",
+                method: 'GET',
+                success: function(response){
+                    $('#cekunit-table').html(response);
+                },
+                error: function(xhr){
+                    $('#message').html('<div class="alert alert-danger"> Gagal Memuat Data Table</div>')
+                }
+            })
+        }
+
+    })
+</script>
 
 <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
 <script src="{{ asset('assets/js/config.js') }}"></script>

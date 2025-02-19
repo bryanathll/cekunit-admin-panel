@@ -71,6 +71,11 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
 
     Route::delete('/delete-all', [cekunitController::class, 'deleteAll'])->name('cekunit.deleteAll');
 
+    Route::get('/cekunit/get-unique-values', [CekUnitController::class, 'getUniqueValues'])->name('cekunit.getUniqueValues');
+
+    // Route untuk menghapus data berdasarkan kolom dan nilai
+    Route::post('/cekunit/delete-by-category', [CekUnitController::class, 'deleteByCategory'])->name('cekunit.deleteByCategory');
+
 
 });
 

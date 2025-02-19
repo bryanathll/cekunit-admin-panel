@@ -269,4 +269,48 @@ public function import(Request $request) {
         return redirect()->route('dashboard')->with('success', 'Semua data berhasil dihapus.');
     }
 // ============================================= end Controller deleteAll ============================================ 
+
+    // Method untuk mengambil data unik berdasarkan kolom
+    public function getUniqueValues(Request $request)
+    {
+        $request->validate([
+            'column' => 'required|string|in:kategori,status,actual_penyelesaian', // Sesuaikan dengan kolom yang ada
+        ]);
+
+        $column = $request->input('column');
+
+        // Ambil data unik dari kolom
+        $uniqueValues = cekunit::select($column)
+            ->whereNotNull($column)
+            ->orderBy($column)
+            ->distinct()
+            ->pluck($column);
+
+        return response()->json($uniqueValues);
+    }
+
+    // Method untuk menghapus data berdasarkan kolom dan nilai
+    public function deleteByCategory(Request $request)
+    {
+        $request->validate([
+            'column' => 'required|string|in:kategori,status,actual_penyelesaian', // Sesuaikan dengan kolom yang ada
+            'value' => 'required|string',
+        ]);
+
+        $column = $request->input('column');
+        $value = $request->input('value');
+        
+        if($value == 'null'){
+            $deleted = cekunit::whereNull($column)->delete();
+        }else{
+            $deleted = cekunit::where($column,$value)->delete();
+        }
+
+        if($deleted){
+            return response()->json(['success' => true, 'message' => 'Data Berhasil Dihapus']);
+        }else{
+            return response()->json(['success' => false, 'message' => 'Gagal Menghapus Data']);
+        }
+    }
+
 }

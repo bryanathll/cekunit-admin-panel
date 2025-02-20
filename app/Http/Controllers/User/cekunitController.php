@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -62,13 +64,34 @@ class cekunitController extends Controller
 public function input_user(Request $request) {
     $sort = $request->query('sort', 'id');
     $direction = $request->query('direction', 'asc');
+    $startDate = $request->query('start_date');
+    $endDate = $request->query('end_date');
+
+        // Log parameter yang diterima
+        Log::info('Sorting Parameters:', [
+            'sort' => $sort,
+            'direction' => $direction,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
     
-    $input_user = input_user::orderBy($sort, $direction)
-    ->paginate(20)
-    ->appends([
-        'sort' => $sort,
-        'direction' => $direction
-    ]);
+
+    $query = input_user::orderBy($sort, $direction);
+
+    if ($sort === 'created_at') {
+        if ($startDate && $endDate) {
+            // Filter berdasarkan tanggal saja (abaikan waktu)
+            $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
+        }
+    }
+
+    $input_user = $query->paginate(20)
+        ->appends($request->query());
+        // Log hasil query
+        Log::info('Query Result:', [
+            'total' => $input_user->total(),
+            'data' => $input_user->items(),
+        ]);
 
         if ($request->ajax()) {
             return view('pages.user.input_user', compact('input_user', 'sort', 'direction'))->render();
@@ -113,23 +136,23 @@ public function input_user(Request $request) {
 
 
 // ============================================== Start Controller sort ==============================================
-    public function sort(Request $request)
-        {
+    // public function sort(Request $request)
+    //     {
             
-            // ambil parameter dari request
-            $sort = $request->input('sort');
-            $direction = $request->input('direction');
+    //         // ambil parameter dari request
+    //         $sort = $request->input('sort');
+    //         $direction = $request->input('direction');
             
-            // Query data dengan sorting
-            $cekunit = cekunit::orderBy($sort, $direction)->paginate(20);
+    //         // Query data dengan sorting
+    //         $cekunit = cekunit::orderBy($sort, $direction)->paginate(20);
             
             
-            // kirim data dalam format JSON
-            return response()->json([
-                'data' => $cekunit->items(),
-                'pagination' => $cekunit->appends(['sort'=>$sort, 'direction'=>$direction])->links()->toHtml()
-            ]);
-        }
+    //         // kirim data dalam format JSON
+    //         return response()->json([
+    //             'data' => $cekunit->items(),
+    //             'pagination' => $cekunit->appends(['sort'=>$sort, 'direction'=>$direction])->links()->toHtml()
+    //         ]);
+    //     }
 // =============================================== end Controller sort ===============================================
 
 
@@ -269,7 +292,10 @@ public function import(Request $request) {
         return redirect()->route('dashboard')->with('success', 'Semua data berhasil dihapus.');
     }
 // ============================================= end Controller deleteAll ============================================ 
-
+    
+    
+    
+// ============================================= start Controller delete by category ================================= 
     // Method untuk mengambil data unik berdasarkan kolom
     public function getUniqueValues(Request $request)
     {
@@ -312,5 +338,6 @@ public function import(Request $request) {
             return response()->json(['success' => false, 'message' => 'Gagal Menghapus Data']);
         }
     }
-
+// ============================================== end Controller delete by category ==================================
+    
 }

@@ -27,10 +27,10 @@ use Illuminate\Support\Facades\Redis;
 Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () {
     Route::get('/', [cekunitController::class, 'index'])->name('dashboard');
 
-    Route::post('/cekunit/sort', [CekUnitController::class, 'sort'])->name('cekunit.sort');
+    // Route::post('/cekunit/sort', [CekUnitController::class, 'sort'])->name('cekunit.sort');
     
     Route::get('/input-user', [cekunitController::class, 'input_user'])->name('input.user');
-    Route::post('/input_user/sort', [CekUnitController::class, 'sort_input_user'])->name('input_user.sort');
+    // Route::post('/input_user/sort', [CekUnitController::class, 'sort_input_user'])->name('input_user.sort');
 
     Route::get('/input-data', [InputDataController::class, 'create'])->name('input.data');
     Route::post('/input-data', [InputDataController::class, 'store'])->name('input.data-nasabah');

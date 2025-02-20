@@ -52,7 +52,7 @@
                 <option value="ForN">ForN</option>
                 <option value="nama">Nama</option>
               </select>
-  
+ 
               <select id="sortDirection">
                 <option value="asc">Asc</option>
                 <option value="desc">Desc</option>
@@ -62,9 +62,14 @@
                 Sort
               </button>
 
+              <div id="dateRangeFilter" style="display:none;" class="mt-2">
+                <input type="text" id="startDate" placeholder="Tanggal Mulai" class="datepicker">
+                <input type="text" id="endDate" placeholder="Tanggal Akhir" class="datepicker">
+              </div>
+
             <div class="mt-5">
                 <!-- Data table dimuat di sini melalui AJAX -->
-                @include('pages.user.input_user', ['sort' => $sort, 'direction' => $direction])
+                @include('pages.user.input_user', ['input_user' => $input_user, 'sort' => $sort, 'direction' => $direction])
             </div>
 
 
@@ -102,18 +107,38 @@
 <script>
 $(document).ready(function() {
     // Fungsi untuk memuat data
+
+    $('#sortColumn').on('change', function(){
+        if($(this).val()==='created_at'){
+            $('#dateRangeFilter').show();
+        }else{
+            $('#dateRangeFilter').hide();
+        }
+    });
+
+    // fungsi untuk memuat data
     function fetchData(page = 1) {
         const sort = $('#sortColumn').val();
         const direction = $('#sortDirection').val();
+        const startDate = $('#startDate').val();
+        const endDate = $('#endDate').val();
+
+    // hanya kirim tanggal jika sorting by created_at
+    const params = {
+        page:page,
+        sort:sort,
+        direction:direction
+    };
+
+    if(sort==='created_at'){
+        params.start_date = startDate;
+        params.end_date = endDate;
+    }
 
         $.ajax({
             url: "{{ route('input.user') }}",
             method: 'GET',
-            data: {
-                page: page,
-                sort: $('#sortColumn').val(),
-                direction: $('#sortDirection').val()
-            },
+            data: params,
             success: function(response) {
                 $('#input-user-table').replaceWith(response);
             },
@@ -147,6 +172,15 @@ $(document).ready(function() {
     });
 });
 </script>
+
+
+<!-- script date picker -->
+ <script>
+    flatpickr(".datepicker", {
+        dateFormat: "Y-m-d",
+        allowInput: true
+    });
+ </script>
 
 
 

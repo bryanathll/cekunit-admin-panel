@@ -158,12 +158,9 @@
                         <option value="desc">Desc</option>
                     </select>
   
-                    <button id='sortButton' class="btn btn-primary    ">
+                    <button id='sortButton' class="btn btn-primary">
                         Sort
-                    </button>                     
-
-
-                        
+                    </button>                                           
 
                     <div id="search-results" class="pt-5">
                         @include('pages.user.pagination_table', [
@@ -435,16 +432,6 @@ $(document).ready(function() {
 </script>
 
 <script>
-    $(document).ready(function() {
-
-        // Saat kolom dipilih
-
-
-
-
-
-        
-    });
     // fungsi untuk reload dropdown data
     function reloadDropdown() {
         const column = $('#columnSelect').val(); // Ambil nilai dropdown pertama

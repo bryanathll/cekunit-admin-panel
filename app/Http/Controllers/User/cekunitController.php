@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\cekunit;
 use App\Models\input_user;
+use App\Models\users;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -57,6 +58,34 @@ class cekunitController extends Controller
         return view('pages.user.dashboard', compact('cekunit', 'sort', 'direction', 'search'));
     }
 // ================================================ end Controller index ==============================================
+
+
+
+// ============================================ start Controller users ================================================ 
+    // Method untuk menangani kedua kasus: tampilan utama dan permintaan AJAX
+    public function users(Request $request) {
+        // Ambil parameter dari request
+        $sort = $request->query('sort', 'created_at'); // Parameter sorting (default: 'no')
+        $direction = $request->query('direction', 'asc'); // Parameter arah sorting (default: 'asc')
+    
+        // Query data
+        $query = users::orderBy($sort, $direction);
+        $users = $query
+        ->paginate(20) // Pagination
+        ->appends([
+            'sort' => $sort,
+            'direction' => $direction
+        ]);
+    
+        // Jika request AJAX, kembalikan view pagination saja
+        if ($request->ajax()) {
+            return view('pages.user.tableUsers', compact('users', 'sort', 'direction'))->render();
+        }
+    
+        // Jika bukan AJAX, kembalikan view lengkap
+        return view('pages.user.users', compact('users', 'sort', 'direction'));
+    }
+// ================================================ end Controller users ==============================================
     
     
     
@@ -66,15 +95,6 @@ public function input_user(Request $request) {
     $direction = $request->query('direction', 'asc');
     $startDate = $request->query('start_date');
     $endDate = $request->query('end_date');
-
-        // Log parameter yang diterima
-        Log::info('Sorting Parameters:', [
-            'sort' => $sort,
-            'direction' => $direction,
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-        ]);
-    
 
     $query = input_user::orderBy($sort, $direction);
 
@@ -87,11 +107,6 @@ public function input_user(Request $request) {
 
     $input_user = $query->paginate(20)
         ->appends($request->query());
-        // Log hasil query
-        Log::info('Query Result:', [
-            'total' => $input_user->total(),
-            'data' => $input_user->items(),
-        ]);
 
         if ($request->ajax()) {
             return view('pages.user.input_user', compact('input_user', 'sort', 'direction'))->render();

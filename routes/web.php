@@ -30,6 +30,7 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
     // Route::post('/cekunit/sort', [CekUnitController::class, 'sort'])->name('cekunit.sort');
     
     Route::get('/input-user', [cekunitController::class, 'input_user'])->name('input.user');
+    Route::get('/users', [cekunitController::class, 'users'])->name('users');
     // Route::post('/input_user/sort', [CekUnitController::class, 'sort_input_user'])->name('input_user.sort');
 
     Route::get('/input-data', [InputDataController::class, 'create'])->name('input.data');

@@ -12,15 +12,17 @@ class users extends Model
     use HasFactory;
 
     protected $table = 'user';
-    public $timestamps = true;
+    public $timestamps = false;
     protected $primaryKey = 'id';
     protected $keyType = 'string';
+    
 
     protected $fillable=[
-        'nomor',
+        'id',
         'created_at',
         'nama',
         'no_wa',
         'email',
+        'nomor'
     ];
 }

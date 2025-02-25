@@ -3,6 +3,7 @@
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\InputDataController;
 use App\Http\Controllers\User\cekunitController;
+use App\Http\Controllers\User\usersController;
 use App\Http\Controllers\ProfileController;
 use App\Exports\CekUnitExport;
 use App\Exports\input_user_export;
@@ -30,7 +31,7 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
     // Route::post('/cekunit/sort', [CekUnitController::class, 'sort'])->name('cekunit.sort');
     
     Route::get('/input-user', [cekunitController::class, 'input_user'])->name('input.user');
-    Route::get('/users', [cekunitController::class, 'users'])->name('users');
+    Route::get('/users', [usersController::class, 'users'])->name('users');
     // Route::post('/input_user/sort', [CekUnitController::class, 'sort_input_user'])->name('input_user.sort');
 
     Route::get('/input-data', [InputDataController::class, 'create'])->name('input.data');
@@ -82,6 +83,10 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
 
 Route::resource('cekunit', cekunitController::class)->parameters([
     'cekunit' => 'no'
+]);
+
+Route::resource('users', usersController::class)->parameters([
+    'users' => 'nomor'
 ]);
 
 

@@ -61,31 +61,7 @@ class cekunitController extends Controller
 
 
 
-// ============================================ start Controller users ================================================ 
-    // Method untuk menangani kedua kasus: tampilan utama dan permintaan AJAX
-    public function users(Request $request) {
-        // Ambil parameter dari request
-        $sort = $request->query('sort', 'created_at'); // Parameter sorting (default: 'no')
-        $direction = $request->query('direction', 'asc'); // Parameter arah sorting (default: 'asc')
-    
-        // Query data
-        $query = users::orderBy($sort, $direction);
-        $users = $query
-        ->paginate(20) // Pagination
-        ->appends([
-            'sort' => $sort,
-            'direction' => $direction
-        ]);
-    
-        // Jika request AJAX, kembalikan view pagination saja
-        if ($request->ajax()) {
-            return view('pages.user.tableUsers', compact('users', 'sort', 'direction'))->render();
-        }
-    
-        // Jika bukan AJAX, kembalikan view lengkap
-        return view('pages.user.users', compact('users', 'sort', 'direction'));
-    }
-// ================================================ end Controller users ==============================================
+
     
     
     
@@ -119,23 +95,33 @@ public function input_user(Request $request) {
     
     
 // ============================================== start Controller edit ===============================================
-    public function edit($no)
-        {
-            $unit = cekunit::find($no);
-            return view('cekunit.edit', compact('unit'));
-        }
+    // public function edit($no)
+    //     {
+    //         $unit = cekunit::find($no);
+    //         return view('cekunit.edit', compact('unit'));
+    //     }
 // =============================================== end Controller edit ================================================ 
 
 
-    
-// ============================================= start Controller delete =============================================
-    public function destroy($no)
-        {
-            $unit = cekunit::find($no);
-            $unit->delete();
-            return redirect()->route('dashboard')->with('success', 'Hapus Data Berhasil');
-        }
-// ============================================== end Controller delete ==============================================
+
+// ============================================ start Controller edit user ============================================ 
+// public function edit($nomor)
+// {
+//     $unit = users::find($nomor);
+//     return view('cekunit.edit', compact('unit'));
+// }
+// ============================================= end Controller edit user ============================================= 
+
+
+
+// ============================================= start Controller delete ==============================================
+public function destroy($no)
+{
+    $unit = cekunit::find($no);
+    $unit->delete();
+    return redirect()->route('dashboard')->with('success', 'Hapus Data Berhasil');
+}
+// ============================================== end Controller delete ===============================================
 
 
 
@@ -147,6 +133,11 @@ public function input_user(Request $request) {
             return redirect()->route('dashboard')->with('success', 'Edit Data Berhasil');
         }
 // ============================================== end Controller update ==============================================
+
+
+
+
+
 
 
 

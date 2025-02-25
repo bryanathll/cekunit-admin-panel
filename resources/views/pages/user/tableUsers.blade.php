@@ -6,6 +6,7 @@
             <th>Nama</th>
             <th>No Whatsapp</th>
             <th>Email</th>
+            <th>Action</th>
         </tr>
     </thead>
 
@@ -17,6 +18,15 @@
             <td>{{ $user->nama ?? 'null' }}</td>
             <td>{{ $user->no_wa ?? 'null' }}</td>
             <td>{{ $user->email ?? 'null' }}</td>
+            <td>
+                <button class="btn btn-primary btn-sm editUsers-btn" data-bs-toggle="modal" data-bs-target="#editModalUsers"
+                    data-nomor="{{$user->nomor}}"
+                    data-no_wa="{{$user->no_wa}}"
+                    data-email="{{$user->email}}"
+                >  
+                Edit
+                </button>
+            </td>
         </tr>
     @endforeach
     </tbody>

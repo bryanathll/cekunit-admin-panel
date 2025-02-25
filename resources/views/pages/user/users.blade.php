@@ -22,6 +22,17 @@
     <div class="container-fluid">
 
     <div class="card">
+            @if (Session::has('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ Session::get('success') }}
+                </div>
+            @endif
+
+            @if (Session::has('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ Session::get('error') }}
+                </div>
+            @endif
 
 
         <h4 class="card-header">Data User</h4>
@@ -44,6 +55,40 @@
             <div class="mt-5">
                 <!-- Data table dimuat di sini melalui AJAX -->
                 @include('pages.user.tableUsers', ['sort' => $sort, 'direction' => $direction])
+            </div>
+
+            <div class="modal fade" id="editModalUsers" tabindex="-1" aria-labelledby="editModalLabel" aria-hidded="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Edit Data User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="editFormUsers" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="form-group pb-3">
+                                    <label for="no_wa">No Whatsapp</label>
+                                    <input type="text" name="no_wa" id="no_wa" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="email">Email</label>
+                                    <input type="text" name="email" id="email" class="form-control">
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Simpan Perubahan</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
 
@@ -100,6 +145,21 @@ $(document).ready(function() {
 });
 </script>
 
+
+<!-- script modal edit -->
+<script>
+    $(document).ready(function(){
+        $(document).on('click','.editUsers-btn', function(){
+            var nomor = $(this).data('nomor')
+            var no_wa = $(this).data('no_wa');
+            var email = $(this).data('email');
+
+            $('#editFormUsers').attr('action', '/users/' + nomor);
+            $('#no_wa').val(no_wa);
+            $('#email').val(email);
+        })
+    })
+</script>
 
 <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
 <script src="{{ asset('assets/js/config.js') }}"></script>

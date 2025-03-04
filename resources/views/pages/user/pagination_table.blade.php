@@ -23,20 +23,20 @@
         @foreach($cekunit as $unit)
             <tr>
                 <td>{{ $unit->no ?? 'null' }}</td>
-                <td>{{ $unit->no_perjanjian ?? 'null' }}</td>
-                <td>{{ $unit->nama_nasabah ?? 'null' }}</td>
-                <td>{{ $unit->nopol ?? 'null' }}</td>
-                <td>{{ $unit->coll ?? 'null' }}</td>
-                <td>{{ $unit->pic ?? 'null' }}</td>
-                <td>{{ $unit->kategori ?? 'null' }}</td>
-                <td>{{ $unit->jto ?? 'null' }}</td>
-                <td>{{ $unit->no_rangka ?? 'null' }}</td>
-                <td>{{ $unit->no_mesin ?? 'null' }}</td>
-                <td>{{ $unit->merk ?? 'null' }}</td>
-                <td>{{ $unit->type ?? 'null' }}</td>
-                <td>{{ $unit->warna ?? 'null' }}</td>
-                <td>{{ $unit->status ?? 'null' }}</td>
-                <td>{{ $unit->actual_penyelesaian ?? 'null' }}</td>
+                <td>{{ $unit->no_perjanjian ?: 'null' }}</td>
+                <td>{{ $unit->nama_nasabah ?: 'null' }}</td>
+                <td>{{ $unit->nopol ?: 'null' }}</td>
+                <td>{{ $unit->coll ?: 'null' }}</td>
+                <td>{{ $unit->pic ?: 'null' }}</td>
+                <td>{{ $unit->kategori ?: 'null' }}</td>
+                <td>{{ $unit->jto ?: 'null' }}</td>
+                <td>{{ $unit->no_rangka ?: 'null' }}</td>
+                <td>{{ $unit->no_mesin ?: 'null' }}</td>
+                <td>{{ $unit->merk ?: 'null' }}</td>
+                <td>{{ $unit->type ?: 'null' }}</td>
+                <td>{{ $unit->warna ?: 'null' }}</td>
+                <td>{{ $unit->status ?: 'null' }}</td>
+                <td>{{ $unit->actual_penyelesaian ?: 'null' }}</td>
                 <td>
                     <button class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" 
                         data-no="{{ $unit->no }}" 

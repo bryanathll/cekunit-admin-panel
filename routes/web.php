@@ -4,6 +4,7 @@ use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\InputDataController;
 use App\Http\Controllers\User\cekunitController;
 use App\Http\Controllers\User\usersController;
+use App\Http\Controllers\User\picController;
 use App\Http\Controllers\ProfileController;
 use App\Exports\CekUnitExport;
 use App\Exports\input_user_export;
@@ -32,10 +33,14 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
     
     Route::get('/input-user', [cekunitController::class, 'input_user'])->name('input.user');
     Route::get('/users', [usersController::class, 'users'])->name('users');
+    Route::get('/pic', [picController::class, 'pic'])->name('pic');
     // Route::post('/input_user/sort', [CekUnitController::class, 'sort_input_user'])->name('input_user.sort');
 
     Route::get('/input-data', [InputDataController::class, 'create'])->name('input.data');
     Route::post('/input-data', [InputDataController::class, 'store'])->name('input.data-nasabah');
+
+    Route::get('/input-PIC', [picController::class, 'create'])->name('input.PIC');
+    Route::post('/input-PIC', [picController::class, 'store'])->name('input.PICcol');;
 
     Route::get('/cekunit/export', function (Request $request) {
 
@@ -87,6 +92,10 @@ Route::resource('cekunit', cekunitController::class)->parameters([
 
 Route::resource('users', usersController::class)->parameters([
     'users' => 'nomor'
+]);
+
+Route::resource('pic', picController::class)->parameters([
+    'pic' => 'nomor'
 ]);
 
 

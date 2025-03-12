@@ -36,61 +36,62 @@
 
 
         <h4 class="card-header">Data User</h4>
-          <div class="table-responsive">
+        <div class="table-responsive">
             <div class="ps-2 pt-3">
               <!-- dropdown sorting -->
-              <select id="sortColumn">
-                <option value="created_at">No</option>
-              </select>
+                <select id="sortColumn">
+                    <option value="created_at">No</option>
+                </select>
  
-              <select id="sortDirection">
-                <option value="asc">Asc</option>
-                <option value="desc">Desc</option>
-              </select>
+                <select id="sortDirection">
+                    <option value="asc">Asc</option>
+                    <option value="desc">Desc</option>
+                </select>
   
-              <button id='sortButton' class="btn btn-primary">
-                Sort
-              </button>
+                <button id='sortButton' class="btn btn-primary">
+                    Sort
+                </button>
 
-            <div class="mt-5">
-                <!-- Data table dimuat di sini melalui AJAX -->
-                @include('pages.user.tableUsers', ['sort' => $sort, 'direction' => $direction])
-            </div>
+                <div class="mt-5">
+                    <!-- Data table dimuat di sini melalui AJAX -->
+                    @include('pages.user.tableUsers', ['sort' => $sort, 'direction' => $direction])
+                </div>
 
-            <div class="modal fade" id="editModalUsers" tabindex="-1" aria-labelledby="editModalLabel" aria-hidded="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
+                <div class="modal fade" id="editModalUsers" tabindex="-1" aria-labelledby="editModalLabel" aria-hidded="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
 
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Data User</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Edit Data User</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form id="editFormUsers" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="form-group pb-3">
+                                        <label for="no_wa">No Whatsapp</label>
+                                        <input type="text" name="no_wa" id="no_wa" class="form-control">
+                                    </div>
+
+                                    <div class="form-group pb-3">
+                                        <label for="email">Email</label>
+                                        <input type="text" name="email" id="email" class="form-control">
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Simpan Perubahan</button>
+                                    </div>
+                                </form>
+                            </div>
+
                         </div>
-
-                        <div class="modal-body">
-                            <form id="editFormUsers" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="form-group pb-3">
-                                    <label for="no_wa">No Whatsapp</label>
-                                    <input type="text" name="no_wa" id="no_wa" class="form-control">
-                                </div>
-
-                                <div class="form-group pb-3">
-                                    <label for="email">Email</label>
-                                    <input type="text" name="email" id="email" class="form-control">
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Simpan Perubahan</button>
-                                </div>
-                            </form>
-                        </div>
-
                     </div>
                 </div>
             </div>
-
+        </div> 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

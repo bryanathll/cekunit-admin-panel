@@ -71,6 +71,11 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group pb-3">
+                                        <label for="nama">Nama</label>
+                                        <input type="text" name="nama" id="nama" class="form-control">
+                                    </div>
+
+                                    <div class="form-group pb-3">
                                         <label for="no_wa">No Whatsapp</label>
                                         <input type="text" name="no_wa" id="no_wa" class="form-control">
                                     </div>
@@ -152,10 +157,12 @@ $(document).ready(function() {
     $(document).ready(function(){
         $(document).on('click','.editUsers-btn', function(){
             var nomor = $(this).data('nomor')
+            var nama = $(this).data('nama');
             var no_wa = $(this).data('no_wa');
             var email = $(this).data('email');
 
             $('#editFormUsers').attr('action', '/users/' + nomor);
+            $('#nama').val(nama);
             $('#no_wa').val(no_wa);
             $('#email').val(email);
         })

@@ -21,6 +21,7 @@
             <td>
                 <button class="btn btn-primary btn-sm editUsers-btn" data-bs-toggle="modal" data-bs-target="#editModalUsers"
                     data-nomor="{{$user->nomor}}"
+                    data-nama="{{$user->nama}}"
                     data-no_wa="{{$user->no_wa}}"
                     data-email="{{$user->email}}"
                 >  

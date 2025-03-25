@@ -85,10 +85,14 @@
                                         <input type="text" name="email" id="email" class="form-control">
                                     </div>
 
-                                    <div class="form-group pb-3">
-                                        <label for="status">Status</label>
-                                        <input type="text" name="status" id="status" class="form-control">
-                                    </div>
+                                    <div class="form-group mb-3">
+                                            <label for="status">Status</label>
+                                            <select name="status" id="status" class="form-control" required>
+                                                <option value="" disabled selected>Pilih Status</option>
+                                                <option value="Karyawan">Karyawan</option>
+                                                <option value="Bukan Karyawan">Bukan Karyawan</option>
+                                            </select>
+                                        </div> 
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

@@ -23,6 +23,7 @@ class users extends Model
         'nama',
         'no_wa',
         'email',
-        'nomor'
+        'nomor',
+        'status'
     ];
 }

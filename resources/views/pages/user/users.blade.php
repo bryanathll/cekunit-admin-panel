@@ -85,6 +85,11 @@
                                         <input type="text" name="email" id="email" class="form-control">
                                     </div>
 
+                                    <div class="form-group pb-3">
+                                        <label for="status">Status</label>
+                                        <input type="text" name="status" id="status" class="form-control">
+                                    </div>
+
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                         <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Simpan Perubahan</button>
@@ -160,11 +165,13 @@ $(document).ready(function() {
             var nama = $(this).data('nama');
             var no_wa = $(this).data('no_wa');
             var email = $(this).data('email');
+            var status = $(this).data('status');
 
             $('#editFormUsers').attr('action', '/users/' + nomor);
             $('#nama').val(nama);
             $('#no_wa').val(no_wa);
             $('#email').val(email);
+            $('#status').val(status);
         })
     })
 </script>

@@ -148,7 +148,11 @@
                         <option value="type">Type</option>
                         <option value="warna">Warna</option>
                         <option value="status">Status</option>
-                        <option value="actual_penyelesaian">Actual Penyelesaian</option>
+                        <option value="actual_penyelesaian">Actual Penyelesaian
+                        <option value="angsuran">Angsuran
+                        <option value="tenor">Tenor
+
+                        </option>
                     </select>
   
                     <select id="sortDirection">
@@ -255,6 +259,16 @@
                                     <label for="actual_penyelesaian">Actual Penyelesaian</label>
                                     <input type="text" name="actual_penyelesaian" id="actual_penyelesaian" class="form-control">
                                 </div>
+                                
+                                <div class="form-group pb-3">
+                                    <label for="angsuran">Angsuran</label>
+                                    <input type="text" name="angsuran" id="angsuran" class="form-control">
+                                </div>
+
+                                <div class="form-group pb-3">
+                                    <label for="tenor">Tenor</label>
+                                    <input type="text" name="tenor" id="tenor" class="form-control">
+                                </div>
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -294,6 +308,8 @@
             var warna = $(this).data('warna');
             var status = $(this).data('status');
             var actual_penyelesaian = $(this).data('actual_penyelesaian');
+            var angsuran = $(this).data('angsuran');
+            var tenor = $(this).data('tenor');
 
             // Isi form di modal dengan data yang sesuai
             $('#editForm').attr('action', '/cekunit/' + no); // Set action form
@@ -311,6 +327,8 @@
             $('#warna').val(warna);
             $('#status').val(status);
             $('#actual_penyelesaian').val(actual_penyelesaian);
+            $('#angsuran').val(angsuran);
+            $('#tenor').val(tenor);
             // Jika ada field lain, isi di sini
         });
     });

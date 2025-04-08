@@ -255,6 +255,8 @@ public function import(Request $request) {
             'warna' => 'nullable|string',
             'status' => 'nullable|string',
             'actual_penyelesaian' => 'nullable|string',
+            'angsuran' => 'nullable|integer',
+            'tenor' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
@@ -276,6 +278,8 @@ public function import(Request $request) {
             'warna' => $cleanRow['warna'] ?? null,
             'status' => $cleanRow['status'] ?? null,
             'actual_penyelesaian' => $cleanRow['actual_penyelesaian'] ?? null,
+            'angsuran' => isset($cleanRow['angsuran']) ? (int) $cleanRow['angsuran'] : null,
+            'tenor' => isset($cleanRow['tenor']) ? (int) $cleanRow['tenor'] : null,
         ];
     }
 

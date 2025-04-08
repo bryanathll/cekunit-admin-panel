@@ -38,7 +38,10 @@ class InputDataController extends Controller
             'merk'=>$request->merk,
             'type'=>$request->type,
             'warna'=>$request->warna,
-            'status'=>$request->status    
+            'status'=>$request->status,    
+            'actual_penyelesaian'=>$request->actual_penyelesaian,    
+            'angsuran'=>$request->angsuran,    
+            'tenor'=>$request->tenor  
         ]);
     return redirect()->route('input.data')->with('success','Data Berhasil Di Input');
     }

@@ -68,29 +68,71 @@ class cekunitController extends Controller
     
 // ============================================ start Controller input_user =========================================== 
 public function input_user(Request $request) {
-    $sort = $request->query('sort', 'id');
-    $direction = $request->query('direction', 'asc');
-    $startDate = $request->query('start_date');
-    $endDate = $request->query('end_date');
+        $search = $request->query('search', '');
+        $sort = $request->query('sort','id');
+        $direction = $request->query('direction', 'asc');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
 
-    $query = input_user::orderBy($sort, $direction);
+        $query = input_user::query();
 
-    if ($sort === 'created_at') {
-        if ($startDate && $endDate) {
-            // Filter berdasarkan tanggal saja (abaikan waktu)
-            $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
+        if($sort == 'created_at'){
+            if($startDate && $endDate){
+                $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
+            }
         }
-    }
 
-    $input_user = $query->paginate(20)
-        ->appends($request->query());
+        $input_user = $query->when($search, function ($query, $search){
+            return $query->whereRaw('LOWER(nopol) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(no_perjanjian) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(nama_nasabah) LIKE ?', ['%' . strtolower($search) . '%']);
+        })
+        ->orderBy($sort, $direction)
+        ->paginate(20)
+        ->appends([
+            'search' => $search,
+            'sort' => $sort,
+            'direction' => $direction,
+            'start_date' => $startDate,
+            'end_date' => $endDate
+        ]);
 
-        if ($request->ajax()) {
+        if ($request->ajax()){
             return view('pages.user.input_user', compact('input_user', 'sort', 'direction'))->render();
         }
-        
+
         return view('pages.user.input_user_table', compact('input_user', 'sort', 'direction'));
     }
+// ============================================== end Controller input_user ===========================================
+    
+    
+    
+    
+// ============================================ start Controller input_user =========================================== 
+// public function input_user(Request $request) {
+//     $sort = $request->query('sort', 'id');
+//     $direction = $request->query('direction', 'asc');
+//     $startDate = $request->query('start_date');
+//     $endDate = $request->query('end_date');
+
+//     $query = input_user::orderBy($sort, $direction);
+
+//     if ($sort === 'created_at') {
+//         if ($startDate && $endDate) {
+//             // Filter berdasarkan tanggal saja (abaikan waktu)
+//             $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
+//         }
+//     }
+
+//     $input_user = $query->paginate(20)
+//         ->appends($request->query());
+
+//         if ($request->ajax()) {
+//             return view('pages.user.input_user', compact('input_user', 'sort', 'direction'))->render();
+//         }
+        
+//         return view('pages.user.input_user_table', compact('input_user', 'sort', 'direction'));
+//     }
 // ============================================== end Controller input_user ===========================================
     
     

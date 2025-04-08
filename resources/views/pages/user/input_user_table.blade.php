@@ -39,7 +39,19 @@
     <div class="card">
 
 
-        <h4 class="card-header">Data Table Input Pengecekan Unit</h4>
+            <div class="card-header">
+                <div class="col-9 ">
+                    <h4 class="">Data Table Pengecekan Unit</h4>
+                </div>
+
+                <div class="col">
+                    <form class="d-flex search" role="search">
+                        <input class="form-control me-2  rounded-pill search-border " type="text" id="search-input" placeholder="Cari..." value="{{ request('search') }}">
+                    </form>
+                </div>
+            </div>
+
+
           <div class="table-responsive">
             <div class="ps-2 pt-3">
               <!-- dropdown sorting -->
@@ -67,9 +79,13 @@
                 <input type="text" id="endDate" placeholder="Tanggal Akhir" class="datepicker">
               </div>
 
-            <div class="mt-5">
+            <div id ='search-results' class="mt-5">
                 <!-- Data table dimuat di sini melalui AJAX -->
-                @include('pages.user.input_user', ['input_user' => $input_user, 'sort' => $sort, 'direction' => $direction])
+                @include('pages.user.input_user', [
+                    'input_user' => $input_user, 
+                    'sort' => $sort, 
+                    'direction' => $direction,
+                    'search => $search'])
             </div>
 
 
@@ -122,12 +138,14 @@ $(document).ready(function() {
         const direction = $('#sortDirection').val();
         const startDate = $('#startDate').val();
         const endDate = $('#endDate').val();
+        const search = $('#search-input').val();
 
     // hanya kirim tanggal jika sorting by created_at
     const params = {
         page:page,
         sort:sort,
-        direction:direction
+        direction:direction,
+        search: search
     };
 
     if(sort==='created_at'){
@@ -140,7 +158,8 @@ $(document).ready(function() {
             method: 'GET',
             data: params,
             success: function(response) {
-                $('#input-user-table').replaceWith(response);
+                $('#search-results').html(response);
+                updateBrowserURL(page,search,sort,direction)
             },
             error: function(xhr) {
                 console.log('Error:', xhr.responseText);
@@ -149,17 +168,22 @@ $(document).ready(function() {
     }
 
     // Fungsi update URL browser
-    function updateBrowserURL(page, sort, direction) {
+    function updateBrowserURL(page, search, sort, direction) {
         const params = new URLSearchParams({
             page: page,
             sort: sort,
-            direction: direction
+            direction: direction,
+            search: search
         });
         const newUrl = `{{ route('input.user') }}?${params.toString()}`;
         window.history.pushState({ path: newUrl }, '', newUrl);
     }
 
     // Event handler untuk tombol sort
+    $('#search-input').on('input',function(){
+        fetchData(1);
+    })
+
     $('#sortButton').on('click', function() {
         fetchData(1);
     });

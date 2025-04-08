@@ -22,6 +22,9 @@ class input_user extends Model
         'userID',
         'nopol',
         'lokasi',
-        'ForN'
+        'ForN',
+        'nama',
+        'nama_nasabah',
+        'no_perjanjian'
     ];
 }

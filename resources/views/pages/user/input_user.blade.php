@@ -53,7 +53,8 @@
             <td colspan="13" class="text-center">
                 {{ $input_user->appends([
                     'sort' => request('sort'),
-                    'direction' => request('direction')
+                    'direction' => request('direction'),
+                    'search' => request('search')
                 ])->links('pagination::bootstrap-4') }}
             </td>
         </tr>

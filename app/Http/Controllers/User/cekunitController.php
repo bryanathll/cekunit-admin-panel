@@ -16,12 +16,81 @@ use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use League\Csv\Reader;
+use App\Exports\input_user_export;
+use Maatwebsite\Excel\Facades\Excel;
+use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Support\Facades\Response;
+// use Illuminate\Support\Facades\StreamedResponse;
 
 
 
 class cekunitController extends Controller
 {
 
+    public function streamExport(Request $request)
+    {
+        $sortColumn = $request->query('sort', 'id');
+        $sortDirection = $request->query('direction', 'asc');
+        
+        $filename = 'input_user_' . now()->format('Ymd_His') . '.csv';
+    
+        // Query builder with sorting
+        $query = input_user::orderBy($sortColumn, $sortDirection);
+    
+        return new StreamedResponse(function () use ($query) {
+            $handle = fopen('php://output', 'w');
+    
+            // UTF-8 BOM for Excel
+            fwrite($handle, "\xEF\xBB\xBF");
+    
+            // CSV Headers
+            fputcsv($handle, [
+                'no', 
+                'created_at', 
+                'userID', 
+                'nopol', 
+                'lokasi', 
+                'ForN', 
+                'nama',
+                'nama_nasabah',
+                'kategori',
+                'no_perjanjian'
+            ]);
+    
+            // Chunked data processing
+            $query->chunk(5000, function ($users) use ($handle) {
+                static $no = 1;
+    
+                foreach ($users as $user) {
+                    fputcsv($handle, [
+                        $no++,
+                        $user->created_at,
+                        $user->userID,
+                        $user->nopol,
+                        $user->lokasi,
+                        $user->ForN,
+                        $user->nama,
+                        $user->nama_nasabah,
+                        $user->kategori,
+                        $user->no_perjanjian
+                    ]);
+                }
+    
+                flush();
+                if (ob_get_level() > 0) {
+                    ob_flush();
+                }
+            });
+    
+            fclose($handle);
+        }, 200, [
+            'Content-Type' => 'text/csv; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ]);
+    }
 
 
 // ============================================ start Controller index ================================================ 
@@ -64,8 +133,7 @@ class cekunitController extends Controller
 
 
     
-    
-    
+        
 // ============================================ start Controller input_user =========================================== 
 public function input_user(Request $request) {
         $search = $request->query('search', '');

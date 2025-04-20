@@ -57,20 +57,22 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
         );
     })->name('cekunit.export');
 
-    Route::get('/input_user/export', function (Request $request) {
+    // Route::get('/input_user/export', function (Request $request) {
 
-        $format = $request->query('format', 'csv');
-        $sortColumn = $request->query('sort', 'id');
-        $sortDirection = $request->query('direction', 'asc');
+    //     $format = $request->query('format', 'csv');
+    //     $sortColumn = $request->query('sort', 'id');
+    //     $sortDirection = $request->query('direction', 'asc');
     
-        $filename = 'input_user_' . date('Ymd_His') . '.' . $format;
+    //     $filename = 'input_user_' . date('Ymd_His') . '.' . $format;
     
-        return Excel::download(
-            new input_user_export($sortColumn, $sortDirection),
-            $filename,
-            $format === 'csv' ? \Maatwebsite\Excel\Excel::CSV : \Maatwebsite\Excel\Excel::XLSX
-        );
-    })->name('input_user.export');
+    //     return Excel::download(
+    //         new input_user_export($sortColumn, $sortDirection),
+    //         $filename,
+    //         $format === 'csv' ? \Maatwebsite\Excel\Excel::CSV : \Maatwebsite\Excel\Excel::XLSX
+    //     );
+    // })->name('input_user.export');
+
+    Route::get('/input_user/export', [cekunitController::class, 'streamExport'])->name('input_user.export');
     
     Route::resource('input_user', cekunitController::class)->except(['show']);
 

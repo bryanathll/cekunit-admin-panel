@@ -29,13 +29,24 @@ class cekunitController extends Controller
 
     public function streamExport(Request $request)
     {
-        $sortColumn = $request->query('sort', 'id');
-        $sortDirection = $request->query('direction', 'asc');
+        $search = $request->query('search','');
+        $sort = $request->query('sort','id');
+        $direction = $request->query('direction','asc');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
         
         $filename = 'input_user_' . now()->format('Ymd_His') . '.csv';
     
         // Query builder with sorting
-        $query = input_user::orderBy($sortColumn, $sortDirection);
+        $query = input_user::orderBy($sort, $direction);
+
+        if($sort == 'created_at'){
+            if($startDate && $endDate){
+                $query->whereRaw('DATE(created_at) BETWEEN ? AND ?',[$startDate, $endDate]);
+            }
+        }
+
+        $query->orderBy($sort, $direction);
     
         return new StreamedResponse(function () use ($query) {
             $handle = fopen('php://output', 'w');
@@ -132,8 +143,6 @@ class cekunitController extends Controller
 
 
 
-    
-        
 // ============================================ start Controller input_user =========================================== 
 public function input_user(Request $request) {
         $search = $request->query('search', '');
@@ -173,56 +182,6 @@ public function input_user(Request $request) {
     }
 // ============================================== end Controller input_user ===========================================
     
-    
-    
-    
-// ============================================ start Controller input_user =========================================== 
-// public function input_user(Request $request) {
-//     $sort = $request->query('sort', 'id');
-//     $direction = $request->query('direction', 'asc');
-//     $startDate = $request->query('start_date');
-//     $endDate = $request->query('end_date');
-
-//     $query = input_user::orderBy($sort, $direction);
-
-//     if ($sort === 'created_at') {
-//         if ($startDate && $endDate) {
-//             // Filter berdasarkan tanggal saja (abaikan waktu)
-//             $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate]);
-//         }
-//     }
-
-//     $input_user = $query->paginate(20)
-//         ->appends($request->query());
-
-//         if ($request->ajax()) {
-//             return view('pages.user.input_user', compact('input_user', 'sort', 'direction'))->render();
-//         }
-        
-//         return view('pages.user.input_user_table', compact('input_user', 'sort', 'direction'));
-//     }
-// ============================================== end Controller input_user ===========================================
-    
-    
-    
-// ============================================== start Controller edit ===============================================
-    // public function edit($no)
-    //     {
-    //         $unit = cekunit::find($no);
-    //         return view('cekunit.edit', compact('unit'));
-    //     }
-// =============================================== end Controller edit ================================================ 
-
-
-
-// ============================================ start Controller edit user ============================================ 
-// public function edit($nomor)
-// {
-//     $unit = users::find($nomor);
-//     return view('cekunit.edit', compact('unit'));
-// }
-// ============================================= end Controller edit user ============================================= 
-
 
 
 // ============================================= start Controller delete ==============================================
@@ -245,32 +204,6 @@ public function destroy($no)
         }
 // ============================================== end Controller update ==============================================
 
-
-
-
-
-
-
-
-// ============================================== Start Controller sort ==============================================
-    // public function sort(Request $request)
-    //     {
-            
-    //         // ambil parameter dari request
-    //         $sort = $request->input('sort');
-    //         $direction = $request->input('direction');
-            
-    //         // Query data dengan sorting
-    //         $cekunit = cekunit::orderBy($sort, $direction)->paginate(20);
-            
-            
-    //         // kirim data dalam format JSON
-    //         return response()->json([
-    //             'data' => $cekunit->items(),
-    //             'pagination' => $cekunit->appends(['sort'=>$sort, 'direction'=>$direction])->links()->toHtml()
-    //         ]);
-    //     }
-// =============================================== end Controller sort ===============================================
 
 
 

@@ -107,13 +107,26 @@
         $('#downloadButton').on('click', function() {
             let sortColumn = $('#sortColumn').val();
             let sortDirection = $('#sortDirection').val();
+            let search = $('#search-input').val();
+            let startDate = '';
+            let endDate = '';
+
+            if (sortColumn === 'created_at'){
+                startDate = $('#startDate').val();
+                endDate = $('#endDate').val();
+            }
             
             
             let url = "{{ route('input_user.export') }}";
             url += `?format=${selectedFormat}`;
             url += `&sort=${sortColumn}`;
             url += `&direction=${sortDirection}`;
+            url += `&search=${search}`;
 
+
+            if (startDate) url += `&start_date=${startDate}`;
+            if (endDate) url += `&end_date=${endDate}`;
+            
             window.location.href = url;
         });
     });

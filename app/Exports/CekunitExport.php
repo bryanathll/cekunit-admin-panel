@@ -37,7 +37,7 @@ class CekUnitExport extends StringValueBinder implements FromQuery, WithHeadings
             'warna',
             'status',
             'actual_penyelesaian',
-            'angsuran',
+            'angsuran ke',
             'tenor',
         ];
     }

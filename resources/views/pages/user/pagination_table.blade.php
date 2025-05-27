@@ -16,7 +16,7 @@
             <th>Warna</th>
             <th>Status</th>
             <th>Actual Penyelesaian</th>
-            <th>Angsuran</th>
+            <th>Angsuran Ke</th>
             <th>Tenor</th>
             <th>Action</th>
         </tr>

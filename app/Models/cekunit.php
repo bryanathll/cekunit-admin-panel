@@ -33,7 +33,7 @@ class cekunit extends Model
         'warna',
         'status',
         'actual_penyelesaian',
-        'angsuran',
+        'angsuran_ke',
         'tenor'
     ];
 }

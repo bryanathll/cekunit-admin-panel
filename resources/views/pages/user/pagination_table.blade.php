@@ -39,7 +39,7 @@
                 <td>{{ $unit->warna ?: 'null' }}</td>
                 <td>{{ $unit->status ?: 'null' }}</td>
                 <td>{{ $unit->actual_penyelesaian ?: 'null' }}</td>
-                <td>{{ $unit->angsuran ?: 'null' }}</td>
+                <td>{{ $unit->angsuran_ke ?: 'null' }}</td>
                 <td>{{ $unit->tenor ?: 'null' }}</td>
                 <td>
                     <button class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" 
@@ -58,7 +58,7 @@
                         data-warna="{{ $unit->warna }}"
                         data-status="{{ $unit->status }}"
                         data-actual_penyelesaian="{{ $unit->actual_penyelesaian }}"
-                        data-angsuran="{{ $unit->angsuran }}"
+                        data-angsuran_ke="{{ $unit->angsuran_ke }}"
                         data-tenor="{{ $unit->tenor }}"
                         >
                         Edit

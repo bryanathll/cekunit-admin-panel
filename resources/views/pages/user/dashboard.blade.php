@@ -149,7 +149,7 @@
                         <option value="warna">Warna</option>
                         <option value="status">Status</option>
                         <option value="actual_penyelesaian">Actual Penyelesaian
-                        <option value="angsuran">Angsuran
+                        <option value="angsuran_ke">Angsuran
                         <option value="tenor">Tenor
 
                         </option>
@@ -261,8 +261,8 @@
                                 </div>
                                 
                                 <div class="form-group pb-3">
-                                    <label for="angsuran">Angsuran</label>
-                                    <input type="text" name="angsuran" id="angsuran" class="form-control">
+                                    <label for="angsuran_ke">Angsuran</label>
+                                    <input type="text" name="angsuran_ke" id="angsuran_ke" class="form-control">
                                 </div>
 
                                 <div class="form-group pb-3">
@@ -308,7 +308,7 @@
             var warna = $(this).data('warna');
             var status = $(this).data('status');
             var actual_penyelesaian = $(this).data('actual_penyelesaian');
-            var angsuran = $(this).data('angsuran');
+            var angsuran_ke = $(this).data('angsuran_ke');
             var tenor = $(this).data('tenor');
 
             // Isi form di modal dengan data yang sesuai
@@ -327,7 +327,7 @@
             $('#warna').val(warna);
             $('#status').val(status);
             $('#actual_penyelesaian').val(actual_penyelesaian);
-            $('#angsuran').val(angsuran);
+            $('#angsuran_ke').val(angsuran_ke);
             $('#tenor').val(tenor);
             // Jika ada field lain, isi di sini
         });

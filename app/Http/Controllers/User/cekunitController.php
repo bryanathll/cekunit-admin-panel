@@ -298,7 +298,7 @@ public function import(Request $request) {
             'warna' => 'nullable|string',
             'status' => 'nullable|string',
             'actual_penyelesaian' => 'nullable|string',
-            'angsuran' => 'nullable|integer',
+            'angsuran_ke' => 'nullable|integer',
             'tenor' => 'nullable|integer',
         ]);
 
@@ -321,7 +321,7 @@ public function import(Request $request) {
             'warna' => $cleanRow['warna'] ?? null,
             'status' => $cleanRow['status'] ?? null,
             'actual_penyelesaian' => $cleanRow['actual_penyelesaian'] ?? null,
-            'angsuran' => isset($cleanRow['angsuran']) ? (int) $cleanRow['angsuran'] : null,
+            'angsuran_ke' => isset($cleanRow['angsuran_ke']) ? (int) $cleanRow['angsuran_ke'] : null,
             'tenor' => isset($cleanRow['tenor']) ? (int) $cleanRow['tenor'] : null,
         ];
     }

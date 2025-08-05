@@ -148,10 +148,15 @@ public function input_user(Request $request) {
         $search = $request->query('search', '');
         $sort = $request->query('sort','id');
         $direction = $request->query('direction', 'asc');
-        $startDate = $request->query('start_date');
-        $endDate = $request->query('end_date');
+
+
+        $startDate = Carbon::now()->submonth()->startOfMonth()->toDateString();
+        $endDate = Carbon::now()->endOfMonth()->toDateString();
 
         $query = input_user::query();
+
+        $query->whereBetween(DB::raw('DATE(created_at)'), [$startDate, $endDate]);
+
 
         if($sort == 'created_at'){
             if($startDate && $endDate){

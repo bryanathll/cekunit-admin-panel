@@ -31,7 +31,7 @@
                 <td>{{ $unit->coll ?: 'null' }}</td>
                 <td>{{ $unit->pic ?: 'null' }}</td>
                 <td>{{ $unit->kategori ?: 'null' }}</td>
-                <td>{{ $unit->jto ?: 'null' }}</td>
+                <td>{{ $unit->jto ? \Carbon\Carbon::parse($unit->jto)->format('d/m/Y') : 'null' }}</td>
                 <td>{{ $unit->no_rangka ?: 'null' }}</td>
                 <td>{{ $unit->no_mesin ?: 'null' }}</td>
                 <td>{{ $unit->merk ?: 'null' }}</td>
@@ -50,7 +50,7 @@
                         data-coll="{{ $unit->coll }}"
                         data-pic="{{ $unit->pic }}"
                         data-kategori="{{ $unit->kategori }}"
-                        data-jto="{{ $unit->jto }}"
+                        data-jto="{{ $unit->jto ? \Carbon\Carbon::parse($unit->jto)->format('Y-m-d') : '' }}"
                         data-no_rangka="{{ $unit->no_rangka }}"
                         data-no_mesin="{{ $unit->no_mesin }}"
                         data-merk="{{ $unit->merk }}"

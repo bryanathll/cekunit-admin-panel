@@ -222,7 +222,7 @@
 
                                 <div class="form-group pb-3">
                                     <label for="jto">JTO</label>
-                                    <input type="text" name="jto" id="jto" class="form-control">
+                                    <input type="date" name="jto" id="jto" class="form-control">
                                 </div>
 
                                 <div class="form-group pb-3">

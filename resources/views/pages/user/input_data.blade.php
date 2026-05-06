@@ -102,7 +102,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="jto">JTO</label>
-                        <input type="text" class="form-control" name="jto" id="jto">
+                        <input type="date" class="form-control" name="jto" id="jto">
                     </div>
                     <div class="form-group mb-3">
                         <label for="no_rangka">Nomor Rangka</label>

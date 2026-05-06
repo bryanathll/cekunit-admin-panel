@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Redis;
 |
  */
 
- Route::redirect('/', '/login')->name('login');
+ Route::redirect('/', '/login');
 
 
 Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () {
